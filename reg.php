@@ -1,136 +1,139 @@
-<?php 
-include 'header.php';
-include "autoload.php";
-$gobj = new Database();
-
-// create variable for store data
-        $image = $_FILES['image'];
-        $fname = $_POST['fname'];
-        $lname = $_POST['lname'];
-        $username = $_POST['username'];
-        $email = $_POST['email'];
-        $remail = $_POST['remail'];
-
-        $pass= $_POST['pass'];
-        $cpass = $_POST['cpass'];
-        $image = $_FILES['image'];
-        $checkbox = $_POST['checkbox'];
-        
-        
-//create array for store all error 
-$result = array();
-
-if(isset($_POST['submit'])){
-
-//check  validation of form 
-
-   if(Validate::required($fname)){
-        array_push($result, "First name is required");
-    }elseif(Validate::only_char_allow($fname)){
-        array_push($result, "Only Charecter Allowed");
-    }elseif(Validate::required($lname)){
-        array_push($result, "last name is required");
-    }elseif(Validate::only_char_allow($lname)){
-        array_push($result, "Only Charecter Allowed");
-    }elseif(Validate::required($username)){
-        array_push($result, "username is required");
-    }elseif(Validate::username_check($username)){
-    array_push($result, "username Inavilde");
-    } elseif(Validate::required($email)){
-        array_push($result, "Email is required ");
-    }elseif(Validate::is_email($email)){
-        array_push($result,"Invalide Email");
-    }elseif(Validate::required($remail)){
-    array_push($result, "Recovery Email is required ");
-    }elseif(Validate::is_email($remail)){
-    array_push($result,"Invalide Email");
-    }elseif(Validate::is_valid_password($pass)){
-        array_push($result, " Password should be at least 8 characters in <br> length and should include at least one upper case letter,<br> one number, and one special character.';");
-    }elseif(Validate::ic_conf_pass($pass,$cpass)){
-        array_push($result,"Password are not Match");
-    }elseif(Validate::is_profile($image)){
-        array_push($result, "Only PNG and JPG are allowed. <br> and size shuld not be exceeds 2MB");
-    }elseif($gobj->fetch_email('Reg_userid',$email)){
-            $result = $gobj->getResult();
-        array_push($result, "Username Already Exist");
-
-    }else{
-       
-        $target_dir = "../upload";
-        $target_file = $target_dir . basename($_FILES["image"]["name"]);
-        $folder = move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
-
-            $data = [
-                'fname' => $_POST["fname"],
-                'lname' => $_POST["lname"],
-                'username' => $_POST["username"],
-                'email' => $_POST["email"],
-                'remail' => $_POST["remail"],
-                'pass' => $_POST["pass"],
-                'cpass' => $_POST["cpass"],
-                'image' => $target_file,
-                't_condition' => $_POST["checkbox"]
-                
-            ];  
-            
-            if($gobj->insert('Reg_userid',$data)){
-                $result = $gobj->getResult(); 
-                echo "<script>
-                alert('Your are Ragisterd Successfully');
-                window.location.href='http://hestalabs.com/tse/Abhishek_mailman/index.php';
-                </script>";           
-            }
-
-    }
-
- }
-
-
-
-?>
+<?php include 'header.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MailMan</title>
 </head>
+
 <body>
     <div class="conatiner">
         <div class="modelf">
             <h4>MailMan</h4>
-            <?php foreach($result as $item){
-                echo $item."<br>";
-                }?>
+            <?php foreach ($result as $item) {
+                echo $item . "<br>";
+            } ?>
             <hr>
-            <form action="#" method="post" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col-md-8 order-1">
-                    <input type="text" name="fname" id="fname" class="form-control mt-2"  placeholder="Enter your First Name" >
-                    <input type="text" name="lname" id="lname" class="form-control mt-2"  placeholder="Enter your last Name" >
-                    <input type="text" name="username" id="username" class="form-control mt-2"  placeholder="Enter username" >
-                    <input type="email" name="email" id="email" class="form-control mt-2" placeholder="Enter your Email" >
-                    <input type="email" name="remail" id="remail" class="form-control mt-2" placeholder="Enter your Recovery Email" > 
-                    <input type="text" name="pass" id="pass" class="form-control mt-2" placeholder="Enter your password" >
-                    <input type="text" name="cpass" id="cpass" class="form-control mt-2" placeholder="Confirm password" >
-                    <div class="box">
-                    <input name="checkbox" id="checkbox" type="checkbox" class="mt-2">
-                    <label for="checkbox"> I agree to these <a href="#">Terms and Conditions</a>.</label>
+            <form method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-8 order-1">
+                        <input type="text" name="fname" id="fname" class="form-control mt-2" placeholder="Enter your First Name">
+                        <span id='f_error' class="text-danger"></span>
+                        <input type="text" name="lname" id="lname" class="form-control mt-2" placeholder="Enter your last Name">
+                        <span id='l_error' class="text-danger"></span>
+                        <input type="text" name="username" id="username" class="form-control mt-2" placeholder="Enter username">
+                        <span id='user_error' class="text-danger"></span>
+                        <input type="email" name="email" id="email" class="form-control mt-2" placeholder="Enter your Email">
+                        <span id='email_error' class="text-danger"></span>
+                        <input type="email" name="remail" id="remail" class="form-control mt-2" placeholder="Enter your Recovery Email">
+                        <span id='remail_error' class="text-danger"></span>
+                        <input type="password" name="pass" id="pass" class="form-control mt-2" placeholder="Enter your password">
+                        <span id='pass_error' class="text-danger"></span>
+                        <input type="password" name="cpass" id="cpass" class="form-control mt-2" placeholder="Confirm password">
+                        <span id='cpass_error' class="text-danger"></span>
+                        <div class="box">
+                            <input name="checkbox" id="checkbox" type="checkbox" class="mt-2">
+                            <span id='check_error'></span>
+                            <label for="error_checkbox"> I agree to these <a href="#">Terms and Conditions</a>.</label>
+                        </div>
+                        <div class="row">
+                            <input type="submit" name="submit" id="regbtn" class="btn btn-primary m-2">
+                            <a class="btn btn-primary m-2" href="index.php">Sign-in-Instead</a>
+                        </div>
                     </div>
-                    <div class="row">
-                        <input type="submit" name="submit"  class="btn btn-primary m-2">
-                       <a  class="btn btn-primary m-2" href="index.php">Sign-in-Instead</a>
+                    <div class="col-md-4 order-2">
+                        <img src="image/login.jpeg" alt="not found" style="height:120px" , width="120px">
+                        <input type="file" id="inputTag" name="image">
+                        <span id='img_error' class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-4 order-2">
-                    <img src="image/login.jpeg"  alt="not found" style="height:120px", width="120px">
-                    <input type="file" id="file" name="image">
-                </div>
-            </div>
             </form>
         </div>
-        
+
     </div>
 </body>
+
 </html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#regbtn").click(function(e) {
+            e.preventDefault();
+            $("#email").on("blur", function() {
+                var email_id = $(this).val();
+                // alert(email_id);
+                $.ajax({
+                    url: "check_email.php",
+                    dataType: "json",
+                    type: "post",
+                    data: {
+                        id: email_id
+                    },
+                    success: function(data) {
+                        if (data.status == true) {
+                            $("#email_error").html(data.msg);
+                        } else {
+                            $("#email_error").html("");
+                        }
+                    }
+                });
+            });
+
+            var fname = $("#fname").val();
+            var lname = $("#lname").val();
+            var username = $("#username").val();
+            var email = $("#email").val();
+            var remail = $("#remail").val();
+            var pass = $("#pass").val();
+            var cpass = $("#cpass").val();
+            var checkbox = $("#checkbox").val();
+
+            var file_data = $('#inputTag').prop('files')[0];
+            var form_data = new FormData();
+
+            form_data.append('fname', fname);
+            form_data.append('lname', lname);
+            form_data.append('username', username);
+            form_data.append('email', email);
+            form_data.append('remail', remail);
+            form_data.append('pass', pass);
+            form_data.append('cpass', cpass);
+            form_data.append('checkbox', checkbox);
+            form_data.append('image', file_data);
+
+            let isChecked = $('#checkbox')[0].checked;
+            if (isChecked == false) {
+                // console.log("hello abhi");
+                $("#check_error").html('<p class="text-danger">please checked</p>');
+            } else {
+                $("#check_error").html("");
+
+            }
+
+            $.ajax({
+                url: "http://hestalabs.com/tse/Abhishek_mailman/reg_user.php",
+                // dataType: "JSON",
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: "json",
+                data: form_data,
+                type: "post",
+                success: function(data) {
+                    // console.log(data);
+                    $.each(data, function(index, value) {
+                        console.log(index + "-" + value);
+                        $("#" + index).text(value);
+                    });
+
+
+                }
+
+            });
+        });
+
+    });
+</script>

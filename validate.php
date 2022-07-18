@@ -7,12 +7,23 @@ class Validate{
             return false;
         }
     }
-public static function is_alphanum($value){
-    if(!ctype_alnum($value)){
+public static function only_char_allow($value){
+    $pattern = "/^[A-Za-z]+$/";
+    if(!preg_match($pattern, $value)){
             return true;
     }else{
         return false;
     }
+}
+
+public static function username_check($value){
+    $pattern = "^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$";
+    if(!preg_match($pattern, $value)){
+        return true;
+}else{
+    return false;
+}
+
 }
 
 public static function is_specil_ch($value){

@@ -377,3 +377,21 @@ $(".del").click(function(){
     <div class="panel-body">Panel Content</div>
   </div>
 </div>
+.................................. 
+// $("#email").on("blur", function() {
+    //         var email_id = $(this).val();
+    //         // alert(email_id);
+    //         $.ajax({
+    //             url : "check_email.php",
+    //             dataType: "json",
+    //             type : "post",
+    //             data : {id: email_id},
+    //             success:function(data){
+    //                 if(data.status == true){
+    //                     $("#email_error").html(data.msg);
+    //                 }else{
+    //                     $("#email_error").html("");
+    //                 }
+    //             }
+    //         });
+    //     });

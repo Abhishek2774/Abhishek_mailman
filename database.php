@@ -3,11 +3,17 @@ class Database{
 
  
     
-
+ // for server
     private $db_host = "localhost";
-    private $db_user = "tse"; // tse
-    private $db_pass= "bPmtHasjyTJ2SgZJ"; // bPmtHasjyTJ2SgZJ
+    private $db_user = "tse"; 
+    private $db_pass= "bPmtHasjyTJ2SgZJ"; 
     private $db_name ="abhishek";
+
+    // for local
+    // private $db_host = "localhost";
+    // private $db_user = "root"; // tse
+    // private $db_pass= "hestabit"; // bPmtHasjyTJ2SgZJ
+    // private $db_name ="bitmail";
 
     private $conn = false;
     public $mysqli = "";
@@ -27,7 +33,6 @@ class Database{
             }
 
     }
-
 
 
 
@@ -79,6 +84,7 @@ public function InboxMails($table,$param){
     }
 }
 // check Email is allready Exist or Not
+
     public function fetch_email($table, $param){
 
             $sql = "SELECT * FROM $table WHERE email='$param'";
@@ -86,7 +92,6 @@ public function InboxMails($table,$param){
              $Exist_email = $this->mysqli->query($sql);
              if($Exist_email){
             if($Exist_email->num_rows > 0){
-                array_push($this->result,"This Email id"." ".$param." "."Already Exist in Table");
                 return true;
             }else{
                 return false;
