@@ -11,8 +11,8 @@ class Database{
 
     // for local
     // private $db_host = "localhost";
-    // private $db_user = "root"; // tse
-    // private $db_pass= "hestabit"; // bPmtHasjyTJ2SgZJ
+    // private $db_user = "root"; 
+    // private $db_pass= "hestabit"; 
     // private $db_name ="bitmail";
 
     private $conn = false;
@@ -166,7 +166,7 @@ public function InboxMails($table,$param){
                 $table_value = implode("', '",$param);
                 $sql = "INSERT INTO $table ($table_column) VALUES ('$table_value')";
                 if($this->mysqli->query($sql)){
-                    array_push($this->result,"Registerd Successfully"); //$this->mysqli->insert_id. if we need id we can add 
+                    array_push($this->result,"Registerd Successfully"); 
                     return true;
                 }else{
                     array_push($this->result,$this->mysqli->error);

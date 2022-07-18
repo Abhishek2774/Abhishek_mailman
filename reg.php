@@ -13,11 +13,10 @@
     <div class="conatiner">
         <div class="modelf">
             <h4>MailMan</h4>
-            <?php foreach ($result as $item) {
-                echo $item . "<br>";
-            } ?>
             <hr>
             <form method="post" enctype="multipart/form-data">
+            <!-- <div id="error_message" class="ajax_response" style="float:left"></div> -->
+	        <div id="success_message" class="ajax_response"></div>
                 <div class="row">
                     <div class="col-md-8 order-1">
                         <input type="text" name="fname" id="fname" class="form-control mt-2" placeholder="Enter your First Name">
@@ -124,10 +123,25 @@
                 type: "post",
                 success: function(data) {
                     // console.log(data);
-                    $.each(data, function(index, value) {
-                        console.log(index + "-" + value);
-                        $("#" + index).text(value);
-                    });
+
+                    if(data.status == true && data.type== "user_registered"){
+                        $("#f_error").html('');
+                        $("#l_error").html('');
+                        $("#img_error").html('');
+                        $("#success_message").html('');
+                        $("#success_message").html(data.message);
+                    }
+
+                    if(data.type == "form_error"){
+                        $.each(data, function(index, value) {
+                            console.log(index + "-" + value);
+                            $("#" + index).text(value);
+                        });
+                    }
+                   
+                   
+                   
+                
 
 
                 }

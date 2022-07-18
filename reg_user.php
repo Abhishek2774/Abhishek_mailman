@@ -16,7 +16,6 @@ $gobj = new Database();
 
 $result = array();
 
-
 if ($fname == '' && $fname == null) {
     $result["f_error"] = "Please Enter first name";
 } elseif (!preg_match("/^[A-Za-z]+$/", $fname)) {
@@ -70,17 +69,16 @@ if(Validate::required($email)){
     $result["cpass_error"]= "";
 
     }
-
     if(Validate::is_profile($image)){
         $result["img_error"] = "Only PNG and JPG are allowed  and size shuld not be exceeds 2MB";
     }else{
        $result["img_error"]= "";
 
     }
-
-    echo json_encode($result);
+   
+if($fname !='' && $lname !='' && $username != '' &&  $email !='' && $remail !='' && $pass !='' && $cpass !='' &&  $checkbox !='' && $image !=''){
   
-        $target_dir = "../upload";
+    $target_dir = "../upload";
         $target_file = $target_dir . basename($_FILES["image"]["name"]);
         $folder = move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
 
@@ -96,17 +94,21 @@ if(Validate::required($email)){
                 't_condition' => $_POST["checkbox"]
                 
             ];  
-            
+
             if($gobj->insert('Reg_userid',$data)){
                 $result = $gobj->getResult(); 
-                echo "<script>
-                alert('Your are Ragisterd Successfully');
-                window.location.href='http://hestalabs.com/tse/Abhishek_mailman/index.php';
-                </script>";           
+                echo json_encode(["status" => true, "type" => "user_registered", "message" => "Your account created successfully."]); exit;
+                  
             }
 
-    
+}
 
+$result["type"] = "form_error";
+
+echo json_encode($result);
+
+    
+      
  
 
 
