@@ -23,7 +23,7 @@ if(isset($_POST['submit'])){
               $_SESSION['login_user_Email'] =  $email_username;
                 echo "<script>
                 alert('Your are Login Successfully');
-                window.location.href='http://localhost/mailman/dashboard.php';
+                window.location.href='http://hestalabs.com/tse/Abhishek_mailman/dashboard.php';
                 </script>"; 
         }else{
             $result = $gobj->getResult();
