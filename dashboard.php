@@ -455,9 +455,9 @@ include 'header.php';
     // inbox Email coding........................Start
     
     function Inboxemail(page) {
-      
-      console.log('called');
-
+      // console.log('called');
+          $("th").show();
+          $("#checkall").show();
       $("#load-table").html("");
       $.ajax({
         url: "inbox_fetch_mails.php",
@@ -466,6 +466,7 @@ include 'header.php';
           page_no: page
         },
         success: function(data) {
+        
           $("#load-table").html(data);
         }
       });
@@ -486,6 +487,8 @@ include 'header.php';
 
     // Send Email coding...................................Start
     function sendbuttonload(page) {
+           $("th").show();
+          $("#checkall").show();
       $("#load-table").html("");
       $.ajax({
         url: "fetch_send_emails.php",
@@ -541,10 +544,6 @@ include 'header.php';
       } else {
 
       }
-
-
-
-
       $.ajax({
         url: "draft_message.php",
         dataType: "text",
