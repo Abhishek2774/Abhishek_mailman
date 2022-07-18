@@ -26,16 +26,16 @@ if(isset($_POST['submit'])){
 
    if(Validate::required($fname)){
         array_push($result, "First name is required");
-    }elseif(Validate::is_alphanum($fname)){
-        array_push($result, " First name shuld be alphabetic");
+    }elseif(Validate::only_char_allow($fname)){
+        array_push($result, "Only Charecter Allowed");
     }elseif(Validate::required($lname)){
         array_push($result, "last name is required");
-    }elseif(Validate::is_alphanum($lname)){
-        array_push($result, " Last name shuld be alphabetic");
+    }elseif(Validate::only_char_allow($lname)){
+        array_push($result, "Only Charecter Allowed");
     }elseif(Validate::required($username)){
         array_push($result, "username is required");
-    }elseif(Validate::is_alphanum($username)){
-    array_push($result, " username name shuld be alphabetic");
+    }elseif(Validate::username_check($username)){
+    array_push($result, "username Inavilde");
     } elseif(Validate::required($email)){
         array_push($result, "Email is required ");
     }elseif(Validate::is_email($email)){
@@ -52,9 +52,11 @@ if(isset($_POST['submit'])){
         array_push($result, "Only PNG and JPG are allowed. <br> and size shuld not be exceeds 2MB");
     }elseif($gobj->fetch_email('Reg_userid',$email)){
             $result = $gobj->getResult();
+        array_push($result, "Username Already Exist");
+
     }else{
        
-        $target_dir = "upload/";
+        $target_dir = "../upload";
         $target_file = $target_dir . basename($_FILES["image"]["name"]);
         $folder = move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
 
@@ -75,7 +77,7 @@ if(isset($_POST['submit'])){
                 $result = $gobj->getResult(); 
                 echo "<script>
                 alert('Your are Ragisterd Successfully');
-                window.location.href='http://localhost/mailman/index.php';
+                window.location.href='http://hestalabs.com/tse/Abhishek_mailman/index.php';
                 </script>";           
             }
 
