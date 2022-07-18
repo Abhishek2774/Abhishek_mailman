@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
     $file_name   = $_FILES['image'];
     // var_dump($file_name);
 
-    $uploaddir = 'upload/';
+    $uploaddir = '../upload';
     $uploadfile = $uploaddir . basename($_FILES['image']['name']);
     $folder = move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile);
 
