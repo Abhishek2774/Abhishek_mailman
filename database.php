@@ -5,8 +5,8 @@ class Database{
     
 
     private $db_host = "localhost";
-    private $db_user = "root";
-    private $db_pass= "hestabit";
+    private $db_user = "tse"; // tse
+    private $db_pass= "bPmtHasjyTJ2SgZJ"; // bPmtHasjyTJ2SgZJ
     private $db_name ="bitmail";
 
     private $conn = false;
