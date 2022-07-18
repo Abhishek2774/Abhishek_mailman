@@ -102,11 +102,11 @@ include 'header.php';
                 <button type="button" style="display:none" class="btn btn-outline-success btn-sm del ml-2">Delete</button>
               </div>
               </th>
-              <th scope="col"></th>
-              <th scope="col">xyz@gmail.mailer.com</th>
-              <th scope="col">Email Subject</th>
-              <th scope="col">YY/MM/DD</th>
-              <th scope="col"></th>
+              <th id="col_head" scope="col"></th>
+              <th id="col_head"  scope="col">xyz@gmail.mailer.com</th>
+              <th id="col_head" scope="col">Email Subject</th>
+              <th id="col_head" scope="col">YY/MM/DD</th>
+              <th id="col_head"  scope="col"></th>
               </tr>
               </thead>
               <tbody id="load-table">
@@ -219,65 +219,62 @@ include 'header.php';
 
 <script>
   $(document).ready(function() {
+    Inboxemail();
+    $(document).on("click", ".rowclick", function() {
+      $("#load-table").html("");
+      var trval = $(this).attr("data-id");
+      // alert(trval);
+      $.ajax({
+        url: "show_email_one.php",
+        type: "post",
+        dataType: 'json',
+        data: {
+          id: trval
+        },
+        success: function(data) {
+          $("th").hide();
+          $("#checkall").hide();
+          if (data.status == false) {
+            $("#load-table").html("<h3>" + data.msg + "</h3>");
+          } else {
+            var table='';
+            $.each(data, function(index, value) {
+              table += '<div class="container">';
+              table += '<div class="row">';
+              table += '<div class="card w-100">';
+              table += '<h5 class="card-header">' + value.subject + '</h5>';
+              table += ' <div class="card-body ">';
+              table += '<div class="row p-5">';
+              table += '<div class="col-sm-4">';
+              table += '<p>from:-' + value.sender_email + '</p>';
+              table += '<p>To:-' + value.reciver_email + '</p>';
+              table += '</div>';
+              table += '<div class="col-sm-4"></div>';
+              table += '<div class="col-sm-4">' + value.datetime + '</div>';
+              table += '</div>';
 
+              table += '<div class="row p-5">';
+              table += '<div class="col-sm-4">';
+              table += '<h4>' + value.attechment + '</h4>';
+              table += '<p>hello.pnj</p>';
+              table += '</div>';
+              table += '<div class="col-sm-4"></div>';
+              table += '<div class="col-sm-4"></div>';
+              table += '</div>';
 
+              table += '</div>';
+              table += ' </div>';
+              table += '</div>';
+              table += '</div>';
 
+            });
 
-    // click on any row get Id 
+            $("#load-table").append(table);
+          }
+        }
+      });
 
-    // $(document).on("click", ".rowclick", function() {
-    //   $("#load-table").html("");
-    //   var trval = $(this).attr("data-id");
-    //   // alert(trval);
-    //   $.ajax({
-    //     url: "show_email_one.php",
-    //     type: "post",
-    //     dataType: 'json',
-    //     data: {
-    //       id: trval
-    //     },
-    //     success: function(data) {
-    //       if (data.status == false) {
-    //         $("#load-table").html("<h3>" + data.msg + "</h3>");
-    //       } else {
-    //         var table;
-    //         $.each(data, function(index, value) {
-    //           table += '<div class="container">';
-    //           table += '<div class="row">';
-    //           table += '<div class="card w-100">';
-    //           table += '<h5 class="card-header">' + value.subject + '</h5>';
-    //           table += ' <div class="card-body ">';
-    //           table += '<div class="row p-5">';
-    //           table += '<div class="col-sm-4">';
-    //           table += '<p>from:-' + value.sender_email + '</p>';
-    //           table += '<p>To:-' + value.reciver_email + '</p>';
-    //           table += '</div>';
-    //           table += '<div class="col-sm-4"></div>';
-    //           table += '<div class="col-sm-4">' + value.datetime + '</div>';
-    //           table += '</div>';
-
-    //           table += '<div class="row p-5">';
-    //           table += '<div class="col-sm-4">';
-    //           table += '<h4>' + value.attechment + '</h4>';
-    //           table += '<p>hello.pnj</p>';
-    //           table += '</div>';
-    //           table += '<div class="col-sm-4"></div>';
-    //           table += '<div class="col-sm-4"></div>';
-    //           table += '</div>';
-
-    //           table += '</div>';
-    //           table += ' </div>';
-    //           table += '</div>';
-    //           table += '</div>';
-
-    //         });
-
-    //         $("#load-table").append(table);
-    //       }
-    //     }
-    //   });
-
-    // });
+    });
 
 
 
@@ -456,8 +453,11 @@ include 'header.php';
 
 
     // inbox Email coding........................Start
-
+    
     function Inboxemail(page) {
+      
+      console.log('called');
+
       $("#load-table").html("");
       $.ajax({
         url: "inbox_fetch_mails.php",
@@ -471,7 +471,7 @@ include 'header.php';
       });
     }
     // click on inbox button 
-
+   
     $("#inbox").click(function() {
       Inboxemail();
       $(document).on("click", "#pagination a", function(e) {
@@ -480,6 +480,7 @@ include 'header.php';
         Inboxemail(page_id);
       });
     });
+    
 
     // Inbox Email Coding..................End
 
@@ -497,7 +498,7 @@ include 'header.php';
         }
       });
     }
-
+   
     $("#sent").click(function() {
       sendbuttonload();
       $(document).on("click", "#pagination a", function(e) {
