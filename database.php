@@ -7,7 +7,7 @@ class Database{
     private $db_host = "localhost";
     private $db_user = "tse"; // tse
     private $db_pass= "bPmtHasjyTJ2SgZJ"; // bPmtHasjyTJ2SgZJ
-    private $db_name ="bitmail";
+    private $db_name ="abhishek";
 
     private $conn = false;
     public $mysqli = "";
