@@ -610,7 +610,17 @@ include 'header.php';
           search: search_term
         },
         success: function(data) {
-          $("#load-table").html(data);
+          var res = JSON.parse(data);
+          if(res.message == "html_data_found"){
+            console.log(res.tablehtml);
+            $("#load-table").html('');
+            $("#load-table").html(res.tablehtml);
+
+          }
+          if(res.status == false){
+            $("#load-table").html('');
+            $("#load-table").html(res.message);
+          }
         }
       });
     });

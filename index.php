@@ -23,8 +23,8 @@ if(isset($_POST['submit'])){
               $_SESSION['login_user_Email'] =  $email_username;
                 echo "<script>
                 alert('Your are Login Successfully');
-                // window.location.href='http://localhost/Abhishek_mailman/dashboard.php'; // for local
-                window.location.href='http://hestalabs.com/tse/Abhishek_mailman/dashboard.php'; // for sever
+                window.location.href='http://localhost/Abhishek_mailman/dashboard.php'; // for local
+                // window.location.href='http://hestalabs.com/tse/Abhishek_mailman/dashboard.php'; // for sever
 
                 </script>"; 
         }else{

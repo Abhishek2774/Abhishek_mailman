@@ -3,7 +3,7 @@ session_start();
 include "autoload.php";
  $gobj = new Database();
 
-$limit_per_page = 5;
+$limit_per_page = 10;
 
 $page ="";
 $login_user = $_SESSION['login_user_Email'];
