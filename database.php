@@ -141,7 +141,7 @@ public function InboxMails($table,$param){
         $email = $param["email"];
         $pass = $param["pass"];
 
-         $sql = "SELECT * FROM $table WHERE email= '$email' OR username='$email' AND pass='$pass'";  
+         $sql = "SELECT * FROM $table WHERE (email= '$email' OR username='$email') AND pass='$pass'";  
          $res = $this->mysqli->query($sql);
          if($res){
             if($res->num_rows > 0){
