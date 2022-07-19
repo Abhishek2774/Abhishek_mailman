@@ -52,6 +52,10 @@ include 'header.php';
     padding: 15px 10px;
     text-align: center;
   }
+  .bold {
+    font-weight: bold;
+    font-size: large;
+  }
 </style>
 </head>
 
@@ -97,9 +101,9 @@ include 'header.php';
                 <th class=" col">
               <div class='d-flex m-2'>
                 <input type="checkbox" id="checkall">
-                <button type="button" style="display:none" class="btn btn-outline-primary read  btn-sm ml-3">Mark read</button>
-                <button type="button" style="display:none" class="btn btn-outline-secondary unread btn-sm ml-2">Mark unread</button>
-                <button type="button" style="display:none" class="btn btn-outline-success btn-sm del ml-2">Delete</button>
+                <button type="button"  style="display:none" id="read" class="btn btn-outline-primary read  btn-sm ml-3">Mark read</button>
+                <button type="button"  style="display:none" id="unread" class="btn btn-outline-secondary unread btn-sm ml-2">Mark unread</button>
+                <button type="button" style="display:none" id="del" class="btn btn-outline-success btn-sm del ml-2">Delete</button>
               </div>
               </th>
               <th id="col_head" scope="col"></th>
@@ -220,7 +224,8 @@ include 'header.php';
 <script>
   $(document).ready(function() {
     Inboxemail();
-    $(document).on("click", ".rowclick", function() {
+    $(document).on("click",".rowclick",function(e) {
+      e.stopPropagation();
       $("#load-table").html("");
       var trval = $(this).attr("data-id");
       // alert(trval);
@@ -277,10 +282,27 @@ include 'header.php';
     });
 
 
-
-    $(document).on("click", ".check", function(e) {
+    // total check count 
+    
+    $(document).on("click","#checkall",function(e){
+      e.stopPropagation();
       var isChecked = $(this).is(':checked');
+      var numberOfChecked = $(':checked').length;
+      console.log(numberOfChecked);
+      var totalCheckboxes = $('input:check').length;
+      var numberNotChecked = totalCheckboxes - numberOfChecked;
+        console.log(numberNotChecked);
+        console.log(totalCheckboxes);
+
+    });
+
+
+    $(document).on("click",".check",function(e) {
+      e.stopPropagation();
+      var isChecked = $(this).is(':checked');
+      console.log(isChecked);
       var check_id = $(this).attr("data-id");
+
 
       if (isChecked == true) {
         $(".del, .read, .unread").show();
@@ -304,8 +326,8 @@ include 'header.php';
     });
 
 
-    $(document).on("click", ".check", function(e) {
-
+    $(".check").click(function(e) {
+        e.preventDefault();
       var isChecked = $(this).is(':checked');
       var check_id = $(this).attr("data-id");
 
@@ -330,12 +352,6 @@ include 'header.php';
       }
 
     });
-
-
-
-
-
-
 
     // Trash Email by Sender
     $(document).on("click", ".attrIdsender", function(e) {
@@ -438,6 +454,7 @@ include 'header.php';
         type: "post",
         success: function(data) {
           $("#error_msg").show();
+          // $("tr").addClass("bold");
           $("#form-data").trigger("reset");
           setTimeout(function() {
             $(".card").hide();
@@ -512,10 +529,71 @@ include 'header.php';
     });
     // Send Email Coding................End
 
-    // draft Email coding................................Start
+    // draft Email coding................................End
+
 
     $("#draft").click(function() {
-      alert("draft click");
+      $("#load-table").html("");
+
+          $.ajax({
+            url : "fetch_draft.php",
+            data : "get",
+            dataType:"json",
+            success:function(data){
+              $("#table_head").show(); 
+              if(data.status == false){
+                $("#load-table").append("<h4>"+data.msg+"</h4>");
+              }else{
+                $.each(data, function(index, value){
+                  $("#load-table").append("<tr><td><input type='checkbox' class='table-check' ></td><td>" + value.reciver_email + "</td><td>" + value.subject + "</td><td>" + value.datetime + "</td></tr>");
+
+                });
+              }
+            }
+
+          });
+    });
+
+
+    $(".close").on("click", function (){
+      event.preventDefault();
+      $("#load-table").html("");
+      var toemail = $("#toemail").val();
+      var ccemail = $("#ccemail").val();
+      var bccemail = $("#bccemail").val();
+      var subject = $("#subject").val();
+      var message = $("#msg").val();
+      var file_data = $('#inputTag').prop('files')[0];
+      var form_data = new FormData();
+      form_data.append('file', file_data);
+      form_data.append('tomaile', toemail);
+      form_data.append('ccemaile', ccemail);
+      form_data.append('bccmaile', bccemail);
+      form_data.append('subject', subject);
+      form_data.append('msg', message);
+
+      if (toemail == '') {
+        alert("Email-Id is required");
+        return false;
+      } 
+      $.ajax({
+        url: "draft.php",
+        dataType: "text",
+        cache: false,
+        contentType: false,
+        processData: false,
+        data: form_data,
+        type: "post",
+        success:function(data){
+
+        }
+        
+      });
+
+   
+    
+    
+
     });
 
     // draft Email coding................................End
@@ -560,7 +638,14 @@ include 'header.php';
 
     });
 
-
+// unread button
+// $(document).on("click","#unread",function(e){
+//   e.stopPropagation();
+//        var isChecked = $(this).is(':checked');
+//       var check_id = $(this).attr("data-id");
+//   alert(check_id);  
+// $("tr").addClass("bold");
+// });
 
     //Trash Email fetch ......................................... Start
 
