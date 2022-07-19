@@ -29,17 +29,15 @@ if($result->num_rows > 0){
                 </tr>";
   } 
 
-//   $sql = "SELECT * FROM All_emails WHERE reciver_email='$login_user' AND reciver_status=1 ";
-//   $result = $gobj->mysqli->query($sql)or die("Query failed");
-//   $total_record =($result->num_rows >0);
-// echo $total_record;
-// die();
-//   $total_pages =ceil($total_record/$limit_per_page);   
-//   $output .='<div id="pagination" class="d-flex">';
-//       for($i=1; $i <= $total_pages; $i++){
-//           $output.="<a class='page-link' id='{$i}' href='#'>{$i}</a>";
-//       }
-// $output .='</div>';
+  $sql = "SELECT * FROM All_emails WHERE reciver_email='$login_user' AND reciver_status=1 ";
+  $result = $gobj->mysqli->query($sql)or die("Query failed");
+  $total_record =($result->num_rows >0);
+  $total_pages =ceil($total_record/$limit_per_page);   
+  $output .='<div id="pagination" class="d-flex">';
+      for($i=1; $i <= $total_pages; $i++){
+          $output.="<a class='page-link' id='{$i}' href='#'>{$i}</a>";
+      }
+$output .='</div>';
 
   echo json_encode(["status" => true, "message" => "html_data_found", "tablehtml" => $output]);
 

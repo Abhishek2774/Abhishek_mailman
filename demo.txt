@@ -1,1 +1,4 @@
 abhishek kumar
+
+
+$sql = "SELECT * FROM All_emails WHERE sender_email='$login_user' AND draft_status=0 ORDER BY id DESC LIMIT {$offset},{$limit_per_page}";

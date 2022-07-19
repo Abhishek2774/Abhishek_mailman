@@ -1,7 +1,7 @@
 <?php
 session_start();
 include "autoload.php";
-$gobj = new Database();
+ $gobj = new Database();
 
 $limit_per_page = 10;
 
@@ -15,20 +15,38 @@ if(isset($_POST['page_no'])){
 }
     $offset = ($page -1)* $limit_per_page;
 
-$login_user = $_SESSION['login_user_Email'];
+    $sql ="SELECT * FROM All_emails WHERE (((sender_status=0 and reciver_status=1) or
+    (sender_status=0 and reciver_status=0)) and sender_email='$login_user') or (reciver_email='$login_user' and 
+   (reciver_status=0 and sender_status=1)) ORDER BY id DESC LIMIT {$offset},{$limit_per_page}";
+    $result = $gobj->mysqli->query($sql)or die("Query failed");
+    $output = "";
+    if($result->num_rows > 0){
 
-$sql ="SELECT * FROM All_emails 
-WHERE  (((sender_status=0 and reciver_status=1) or (sender_status=0 and reciver_status=0)) and sender_email='$login_user') or (reciver_email='$login_user' and (reciver_status=0 and sender_status=1)) ORDER BY id DESC LIMIT {$offset},{$limit_per_page}";
+        $output.='<table>';
 
-  $result = $gobj->mysqli->query($sql);
-        if($result->num_rows > 0){
+    while($row=$result->fetch_assoc()){
+    
+        $output .="<tr class='rowclick' data-id='{$row["id"]}'><td><input type='checkbox' class='check' data-id='{$row["id"]}'></td><td>{$row["reciver_email"]}</td><td>{$row["subject"]}</td><td>{$row["datetime"]}</td><td><i class='fa fa-trash fa-lg attrIdreciver' data-id='{$row["id"]}' aria-hidden='true'></i></td></tr>";
+    }
+    $output .="</table>";
 
-            $output = $result->fetch_all(MYSQLI_ASSOC);
-             echo json_encode($output);
-            
-        }else{
-            echo json_encode(array("msg"=> "0 Result found","status"=> false));
+    $sql ="SELECT * FROM All_emails WHERE (((sender_status=0 and reciver_status=1) or
+    (sender_status=0 and reciver_status=0)) and sender_email='$login_user') or (reciver_email='$login_user' and 
+   (reciver_status=0 and sender_status=1))";
+
+    $result = $gobj->mysqli->query($sql)or die("Query failed");
+    $total_record = mysqli_num_rows($result);
+    // echo $total_record;
+    $total_pages = ceil($total_record/$limit_per_page);
+    // echo $total_pages;
+
+    $output .='<div id="pagination" class="d-flex">';
+        for($i=1; $i <= $total_pages; $i++){
+            $output.="<a class='page-link' id='{$i}' href='#'>{$i}</a>";
         }
-        
- 
-?>
+  $output .='</div>';
+//   $output.='</div>';
+        echo $output;
+}else{
+    echo "No Record Found";
+}
