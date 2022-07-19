@@ -1,41 +1,4 @@
-<?php
-session_start();
-include 'header.php';
-include "autoload.php";
-$gobj = new Database();
-
-$login_Email = $_SESSION['login_user_Email'];
-$newpass = $_POST['newpass'];
-$cpass  = $_POST['cpass'];
-
-$data = [
-    'login'=>$login_Email,
-    'pass' => $newpass,
-    'cpass' => $cpass 
-
-];
-
-if (isset($_POST['submit'])) {
-    if (Validate::required($newpass)) {
-        echo "<script> alert('New Password field are Required');</script>";
-    } elseif (validate::ic_conf_pass($newpass, $cpass)) {
-        echo "<script> alert('Confirm password are not match');</script>";
-    } elseif (Validate::is_valid_password($newpass)) {
-        echo "<script> alert('Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character');
-        </script>";
-    }else{
-        // print_r($data);
-        if ($gobj->reset_password('Reg_userid', $data)) {
-            echo "<script>
-            alert('Your Password successfully Update');
-            window.location.href='http://localhost/mailman/index.php';
-            </script>";
-        }
-    }
-}
-?>
-
-
+<?php include 'header.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,22 +10,28 @@ if (isset($_POST['submit'])) {
 </head>
 <body>
     <div class="container my-5">
+        <div class="header text-danger"></div>
         <div class="row border">
             <div class="col-md-8 py-5">
                 <img src="image/keys.jpeg" alt="not found">
             </div>
             <div class="col-md-4 py-5">
-            <form action="#" method="post" enctype="multipart/form-data">
+            <form action="" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                    <label for="">Old Password</label>
+                    <input type="password" id="oldpass" name="oldpass" class="form-control">
+                </div>
                 <div class="form-group">
                     <label for="">New Password</label>
-                    <input type="text" name="newpass" class="form-control">
+                    <input type="password" id="newpass" name="newpass" class="form-control">
                 </div>
                 <div class="form-group">
                     <label for="">Confirm Password</label>
-                    <input type="text" name="cpass" class="form-control">
+                    <input type="password" id="cpass" name="cpass" class="form-control">
                 </div>
                 <div class="form-group">
-                    <input type="submit" name="submit" class="btn btn-primary" value="Reset">
+                    <button class="btn btn-primary" id="btnsubmit">Reset</button>
+                
                 </div>
             </form>
             </div>
@@ -72,3 +41,31 @@ if (isset($_POST['submit'])) {
 </body>
 
 </html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#btnsubmit").click(function(e){
+            e.preventDefault();
+                var oldpass = $("#oldpass").val();
+                var newpass = $("#newpass").val();
+                var cpass = $("#cpass").val();
+
+                $.ajax({
+                        url : "change_pass_db.php",
+                        type: "post",
+                        dataType: "json",
+                        data:{oldpass: oldpass, newpass: newpass, cpass: cpass},
+                        success:function(data){
+                            if(data.status== false){
+                                $(".header").html(data.message);
+                            }else{
+                                $(".header").html(data.message);
+
+                            }
+                        }
+                });
+
+        });
+
+    });
+</script>
