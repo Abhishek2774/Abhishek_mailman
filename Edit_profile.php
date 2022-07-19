@@ -51,7 +51,7 @@ if (isset($_POST['submit'])) {
             <div class="col-sm-8">
                 <div class="card mt-5">
                     <div class="card-header">
-                    <!-- <i class="fa-solid fa-arrow-left-long"></i> -->
+                   
                         Profile
                     </div>
                     <div class="card-body">

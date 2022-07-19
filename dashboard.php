@@ -173,9 +173,7 @@ include 'header.php';
     <div class="modal-content">
       <div class="card">
         <div class="card-header">
-          Profile <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          Profile 
         </div>
         <div class="card-body">
           <div class="row py-5">
