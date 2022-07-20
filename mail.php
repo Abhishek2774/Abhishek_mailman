@@ -1,72 +1,42 @@
 <?php
-session_start();
- include "autoload.php";
- $gobj = new Database();
 
- use PHPMailer\PHPMailer\PHPMailer;
- use PHPMailer\PHPMailer\SMTP;
- use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 
 require 'PHPMailer/src/Exception.php';
 require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 
- $result_error= array();
- if(isset($_POST['submit'])){
-      $email = $_POST['email'];
-      if(Validate::required($email)){
-         echo "<script>
-                 alert('Email is required');
-                 window.location.href='http://localhost/mailman/forgat.php';
-                 </script>";  
-      }elseif(Validate::is_email($email)){
-         echo "<script>
-         alert('Invalid Email');
-         window.location.href='http://localhost/mailman/forgat.php';
-         </script>";  
-      }else{
 
-         $email_id = $_POST['email'];
-         $_SESSION['email_id'] = $email_id; // jis Email-id s user registered h use Email-id k session banaya h
-     
-         $mail = new PHPMailer(true);
+class sendEmail{
+    
+    public function email_send($to_email,$subject,$html,$name){
+        // echo $to_email.$subject.$html.$name;
 
-        try {
-        
-                        
-            $mail->isSMTP();                                           
-            $mail->Host       = 'smtp.gmail.com';                     
-            $mail->SMTPAuth   = true;                                   
-            $mail->Username   = 'abhihesta@gmail.com';                    
-            $mail->Password   = 'cnqtpjgukjpdxuuw';           // create webapp in gmail and get password and use here                   
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            
-            $mail->Port       = 465;                                    
+        $link = md5(time());
+        $mail = new PHPMailer(true);
+    
+        $mail->isSMTP();                                           
+        $mail->Host       = 'smtp.gmail.com';                     
+        $mail->SMTPAuth   = true;                                   
+        $mail->Username   = 'Abhihesta@gmail.com';                    
+        $mail->Password   = 'egjxxtrgyhdqvsek';                             
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            
+        $mail->Port       = 465;                                    
 
-        
-            $mail->setFrom('abhishek@gmail.com', 'hestabit pvt ltd');
+    
+        $mail->setFrom('Abhishek@gmail.com', $name);
 
-            $mail->addAddress($email_id);    // to email placeholder       
+        $mail->addAddress($to_email);             
 
 
-            $mail->isHTML(true);                                 
-            $mail->Subject = 'Forgat password Link';
-            $mail->Body    = 'Click on This URL:-http://localhost/mailman/new_password.php';
-            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+        $mail->isHTML(true);                                 
+        $mail->Subject = $subject;
+        $mail->Body    = $html;
+        $mail->AltBody = 'Verfication link for reset password';
 
-            $mail->send();
-            echo "<script>
-            alert('Email has been sent Your Registerd Email id');
-            </script>"; 
-        } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-        }
-            }
-        }
-
-
-
-
-
-
-?>
+        return $mail->send();
+    }
+}

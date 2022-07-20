@@ -62,7 +62,7 @@ if(isset($_POST['submit'])){
                         <h5>Login to your account here</h5>
                         <div class="form-group">
                             <input type="text" name="email" class="form-control mt-2" placeholder="Email/username">
-                            <input type="text" name="pass" class="form-control mt-2" placeholder="password">
+                            <input type="password" name="pass" class="form-control mt-2" placeholder="password">
                             <a class="mt-2" href="forgat.php">forgot password?</a>
                             <span>Dont't have an account yet?</span>
                             <div>
