@@ -21,13 +21,11 @@ if(isset($_POST['submit'])){
         if($gobj->login_user('Reg_userid',$data)){
             $result = $gobj->getResult(); 
               $_SESSION['login_user_Email'] =  $email_username;
-                echo "<script>
-                alert('Your are Login Successfully');
-                // window.location.href='http://localhost/Abhishek_mailman/dashboard.php'; // for local
-                window.location.href='http://hestalabs.com/tse/Abhishek_mailman/dashboard.php'; // live sever
-
-                </script>"; 
+            //   header("location:http://localhost/Abhishek_mailman/dashboard.php"); // for local
+              header("location:http://hestalabs.com/tse/Abhishek_mailman/dashboard.php"); // for sever
+                
         }else{
+            
             $result = $gobj->getResult();
         }
     }

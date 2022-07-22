@@ -395,3 +395,343 @@ $(".del").click(function(){
     //             }
     //         });
     //     });
+    ............................................................................  
+    / create variable for store data
+      // echo   $fname = $_POST['fname'];
+      //  echo   $lname = $_POST['lname'];
+      //  echo  $username = $_POST['username'];
+      //  echo   $email = $_POST['email'];
+      //  echo  $remail = $_POST['remail'];
+      // echo  $pass= $_POST['pass'];
+      //  echo   $cpass = $_POST['cpass'];
+      //  echo  $checkbox = $_POST['checkbox'];
+
+
+      $image = $_FILES['image']['name'];
+
+       var_dump($image);
+  
+        
+
+        // echo "<pre>";
+        // print_r($_FILES['image']);
+        // // print_r($image);
+        // exit;
+
+        // if(isset($image)){
+        //     // $errors= array();
+        //     $file_name = $_FILES['image']['name'];
+        //     $file_size = $_FILES['image']['size'];
+        //     $file_tmp = $_FILES['image']['tmp_name'];
+        //     $file_type = $_FILES['image']['type'];
+        //     $file_ext=strtolower(end(explode('.',$_FILES['image']['name'])));
+
+        //     echo $file_ext; die;
+            
+        //     $expensions= array("jpeg","jpg","png");
+            
+        //     if(in_array($file_ext,$expensions)=== false){
+        //         // echo"sjhdghsd";
+
+        //     //    echo json_encode(["extension not allowed, please choose a JPEG or PNG file."]);
+        //        exit;
+        //     }
+            
+        //     if($file_size > 2097152) {
+        //         echo"sjhdghsd";
+        //     //    echo json_encode(["File size must be excately 2 MB"]);
+        //        exit;
+        //     }
+            
+           
+        //  }
+
+        //  echo json_encode($output);
+
+
+        // if(empty($_POST["image"])){
+        //     $imageError = "";
+        //     } else {
+        //     $image = check_input($_POST["image"]);
+        //     $allowed =  array('jpeg','jpg', "png", "JPEG","JPG", "PNG");
+        //     $ext = pathinfo($image, PATHINFO_EXTENSION);
+        //     if(!in_array($ext,$allowed) ) {
+        //     $imageError = "jpeg only";
+        //     echo json_encode(["msg"=> $imageError, "status"=> false]);
+        //     }
+        //     }
+        //     function check_input($data) {
+        //         $data = trim($data);
+        //         $data = stripslashes($data);
+        //         $data = htmlspecialchars($data);
+        //         return $data;
+        //     }
+
+// if($fname !='' && $lname !='' && $username != '' &&  $email !='' && $remail !='' && $pass !='' && $cpass !='' &&  $checkbox !='' && $image !=''){
+  
+//     $target_dir = "../upload";
+//         $target_file = $target_dir . basename($_FILES["image"]["name"]);
+//         $folder = move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
+
+//             $data = [
+//                 'fname' => $_POST["fname"],
+//                 'lname' => $_POST["lname"],
+//                 'username' => $_POST["username"],
+//                 'email' => $_POST["email"],
+//                 'remail' => $_POST["remail"],
+//                 'pass' => $_POST["pass"],
+//                 'cpass' => $_POST["cpass"],
+//                 'image' => $target_file,
+//                 't_condition' => $_POST["checkbox"]
+                
+//             ];  
+
+//             if($gobj->insert('Reg_userid',$data)){
+//                 $result = $gobj->getResult(); 
+//                 echo json_encode(["status" => true, "type" => "user_registered", "message" => "Your account created successfully."]); exit;
+                  
+//             }
+
+// }
+
+
+/////////////////////////////////////////////// Validation uing jquery ////////////////////////
+
+
+var namereg = /^[A-Za-z]+$/;
+            if (fname == '' || fname == null) {
+                error++;
+                $('#f_error').text('First name is required.');
+            } else if (!namereg.test(fname)) {
+                error++;
+                $('#f_error').text('Only latter are Allowed');
+            } else {
+                $('#f_error').text('');
+            }
+            var lnamereg = /^[A-Za-z]+$/;
+            if (lname == '' || lname == null) {
+                error++;
+                $("#l_error").text("Last name is Required");
+            } else if (!lnamereg.test(lname)) {
+                error++;
+                $("#l_error").text("Only latter are Allowed");
+            } else {
+                $('#l_error').text('');
+            }
+            if (username == '' || username == null) {
+                error++;
+                $("#user_error").text("Username is Required");
+            } else if (username) {
+                $.ajax({
+                    url: "check_email_username.php",
+                    dataType: "json",
+                    type: "post",
+                    data: {
+                        username: username
+                    },
+                    success: function(data) {
+                        if (data.status == true) {
+                            error++;
+                            $("#user_error").html(data.msg);
+                        } else {
+                            $("#user_error").html("");
+                        }
+                    }
+                });
+            }
+
+            var emailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (email == '' || email == null) {
+                error++;
+                $('#email_error').text('Email is required');
+            } else if (!emailRegex.test(email)) {
+                error++;
+                $('#email_error').text('Enter Valid email id');
+            } else if (email) {
+                $.ajax({
+                    url: "check_email_username.php",
+                    dataType: "json",
+                    type: "post",
+                    data: {
+                        id: email
+                    },
+                    success: function(data) {
+                        if (data.status == true) {
+                            error++;
+                            $("#email_error").html(data.msg);
+                        } else {
+                            $("#email_error").html("");
+                        }
+                    }
+                });
+            }
+
+            var RecoveremailRegex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (remail == '' || remail == null) {
+                error++;
+                $('#remail_error').text('Recovery Email is required');
+            } else if (!RecoveremailRegex.test(email)) {
+                error++;
+                $('#remail_error').text('Enter Valid  Recover email id');
+            } else {
+                $('#remail_error').text('');
+
+            }
+
+            var passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}/;
+            if (pass == '' || pass == null) {
+                error++;
+                $('#pass_error').text('Password is required');
+            } else if (!passRegex.test(pass)) {
+                error++;
+                $('#pass_error').text('Invalide Password');
+            } else {
+                $('#pass_error').text('');
+
+            }
+
+            if (cpass == '' || cpass == null) {
+                error++;
+                $("#cpass_error").text('Confirmed password are Required');
+            } else if (cpass != pass) {
+                error++;
+                $("#cpass_error").text('Confirmed password are not match');
+            } else {
+                $("#cpass_error").text('');
+            }
+
+            let isChecked = $('#checkbox')[0].checked;
+            if (isChecked == false) {
+                error++;
+                $("#check_error").html('<p class="text-danger">please checked</p>');
+            } else {
+                $("#check_error").html("");
+
+            }
+
+            if (error > 0) {
+                return false;
+            } else {
+
+                $.ajax({
+                    url: "reg_user.php",
+                    type: 'post',
+                    dataType: "json",
+                    data: form_data,
+                    contentType: false,
+                    processData: false,
+                    success: function(data) {
+                        console.log(data.message);
+
+                    }
+                });
+
+            }
+
+
+............................ reg_user.php......................................... 
+
+if ($lname == '' and $lname == null) {
+    $result['l_error'] = 'Please Enter Last Name';
+  } else if (!preg_match($namepattern, $lname)) {
+    $result['l_error'] = 'Only letters allowed';
+  } else {
+
+    $result['l_error'] = '';
+  }
+
+
+  if ($username == null) {
+    $result['user_error'] = 'Please fill  User Name';
+  } else {
+    $gobj = new Database();
+    $sql = "SELECT username  from Reg_userid where username  = '$username'";
+    $result = $gobj->mysqli->query($sql);
+    if ($result->num_rows > 0) {
+      $result['user_error'] = 'Username already Exist';
+    } else {
+      $result['user_error'] = '';
+    }
+  }
+
+ 
+  if (!preg_match($primary_email, $email)) {
+    $email = $_POST['email'] . "@mailman.com";
+  }
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+    $result['email_error'] = 'email address not vlaid';
+  } else {
+    $gobj = new Database();
+    $sql = "SELECT email from Reg_userid where email = '$email'";
+    $result = $gobj->mysqli->query($sql);
+    if ($result->num_rows > 0) {
+      $result['email_error'] = 'email address not unique';
+    } else {
+      $result['email_error'] = '';
+    }
+  }
+
+  if (!preg_match($recover_pattern, $remail)) {
+
+    $result['remail_error'] = 'Invalid Email';
+  } else {
+
+    $result['remail_error'] = '';
+  }
+
+  if (!preg_match('/^(?=.*\d)(?=.*[A-Za-z])(?=.*[!@#$%])[0-9A-Za-z!@#$%]{8,20}$/', ($pass))) {
+    $result['pass_error'] = 'Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.';
+  } else {
+
+    $result['pass_error'] = '';
+  }
+
+  if ($pass != $cpass) {
+    $result['cpass_error'] = 'Password should be same';
+  } else {
+
+    $result['cpass_error'] = '';
+  }
+
+
+  // $path = "upload";
+  // $temp_name = $images['tmp_name'];
+  // $name = $images['name'];
+  // $path = $path . "/" . $name;
+  // if ($images != null) {
+  //   $allowed =  array('jpeg', 'jpg', 'png', 'JPEG', 'JPG', 'PNG');
+  //   $ext = pathinfo($images['name'], PATHINFO_EXTENSION);
+  //   if (!in_array($ext, $allowed)) {
+  //     $result['imgid'] = 'Please updload valid image';
+  //   } else if ($images['name']['size'] > 200000) {
+  //     $result['imgid'] = 'size should be less than 2 kb';
+  //   } else {
+  //     move_uploaded_file($temp_name, $path);
+  //     $result['imgid'] = '';
+  //   }
+  // }
+
+
+  echo json_encode($result);
+  // $count = 0;
+  // foreach ($result as $key => $value) {
+  //   if ($value != '') {
+  //     $count = 1;
+  //     break;
+  //   }
+  // }
+
+  // if ($count == 1) {
+  //   echo json_encode(
+  //     [
+  //       "type" => "form_error",
+  //       "arrayvalue" => $result,
+  //       "response" => false
+  //     ]
+  //   );
+  // } else {
+  //   $w = "INSERT INTO users(First_name, Last_name ,User_name,Picture, Email, Secordary_mail, Password,Confirmpassword) VALUES ('$Fname', '$Lname', '$Uname','$name', '$Ename', '$Altname', '$Pass','$Altpass')";
+  //   $obj->insert($w);
+  //   echo json_encode(['response' => true]);
+  // }

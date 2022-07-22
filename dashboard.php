@@ -299,7 +299,7 @@ include 'header.php';
     $(document).on("click", ".check", function(e) {
       e.stopPropagation();
       var isChecked = $(this).is(':checked');
-      console.log(isChecked);
+      // console.log(isChecked);
       var check_id = $(this).attr("data-id");
 
 
