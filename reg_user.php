@@ -82,7 +82,7 @@ if (isset($_POST['submit'])) {
   }
 
 
-  $path="upload";
+  $path="../upload/";
   $temp_name = $image['tmp_name'];
   $name = $image['name'];
    $path = $path . "/" . $name;
