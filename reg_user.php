@@ -82,7 +82,7 @@ if (isset($_POST['submit'])) {
   }
 
 
-  $path="../upload/";
+  $path="../upload";
   $temp_name = $image['tmp_name'];
   $name = $image['name'];
    $path = $path . "/" . $name;
@@ -125,7 +125,7 @@ foreach ( $error as $key => $value ) {
                 'remail' => $_POST["remail"],
                 'pass' => $_POST["pass"],
                 'cpass' => $_POST["cpass"],
-                'image' => $path,
+                'image' => $name,
                 't_condition' => $_POST["checkbox"]
                       
                   ];  
