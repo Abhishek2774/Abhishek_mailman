@@ -15,17 +15,25 @@ if(isset($_POST['page_no'])){
 }
     $offset = ($page -1)* $limit_per_page;
 
-     $sql = "SELECT * FROM All_emails WHERE reciver_email='$login_user' AND reciver_status=1 ORDER BY id DESC LIMIT {$offset},{$limit_per_page}";
+     $sql = "SELECT * FROM All_emails WHERE reciver_email='$login_user'  AND reciver_status=1 ORDER BY id DESC LIMIT {$offset},{$limit_per_page}";
 
     $result = $gobj->mysqli->query($sql)or die("Query failed");
     $output = "";
     if($result->num_rows > 0){
 
-        $output.='<table>';
+        $output.='<table>
+        <tr>
+        <th id="col_head" scope="col"><h4>Inbox</h4></th>
+        <th id="col_head" scope="col">reciver@mailman.com</th>
+        <th id="col_head" scope="col">Email Subject</th>
+        <th id="col_head" scope="col">YY/MM/DD</th>
+        <th id="col_head" scope="col"></th>
+        </tr>
+        ';
 
     while($row=$result->fetch_assoc()){
     
-        $output .="<tr class='rowclick' data-id='{$row["id"]}'><td><input type='checkbox' class='check' data-id='{$row["id"]}'></td><td>{$row["sender_email"]}</td><td>{$row["subject"]}</td><td>{$row["datetime"]}</td><td><i class='fa fa-trash fa-lg attrIdreciver' data-id='{$row["id"]}' aria-hidden='true'></i></td></tr>";
+        $output .="<tr class='rowclick' data-id='{$row["id"]}'><td><input type='checkbox' class='check' data-id='{$row["id"]}'></td><td>{$row["sender_email"]}</td><td>{$row["subject"]}</td><td>{$row["datetime"]}</td></tr>";
     }
     $output .="</table>";
 

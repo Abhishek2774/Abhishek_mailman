@@ -7,6 +7,9 @@ include "autoload.php";
 $gobj = new Database();
 $Reg_user_session_email = $_SESSION['email'];
 $profile = $gobj->desh_profile('Reg_userid', $Reg_user_session_email); // fetch profile data
+
+// print_r($profile);
+// exit;
 include 'header.php';
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -82,12 +85,18 @@ include 'header.php';
       </nav>
     </div>
     <div class="sidebar py-5">
-      <ul>
-        <li class="btn btn-warning flex"><button type="button" data-toggle="modal" data-target="#exampleModal">Compose</button></li>
-        <li class="pt-4" id="inbox">Inbox</li>
-        <li class="pt-2" id="sent">Sent</li>
-        <li class="pt-2" id="draft">Draft</li>
-        <li class="pt-2" id="trash">Trash</li>
+      <ul style="list-style: none;">
+
+        <li class=""><button type="button" class="btn btn-warning flex" data-toggle="modal" data-target="#exampleModal">Compose</button></li>
+
+        <li><button type="button" class="btn  mt-5" id="inbox">Inbox</button></li>
+
+        <li><button type="button" class="btn  mt-2" id="sent">Sent</button></li>
+
+        <li><button type="button" class="btn mt-2" id="draft">Draft</button></li>
+
+        <li><button type="button" class="btn   mt-2" id="trash">Trash</button></li>
+
       </ul>
     </div>
 
@@ -101,17 +110,16 @@ include 'header.php';
               <tr>
                 <th class=" col">
               <div class='d-flex m-2'>
-                <input type="checkbox" id="checkall">
                 <button type="button" style="display:none" id="read" class="btn btn-outline-primary read  btn-sm ml-3">Mark read</button>
                 <button type="button" style="display:none" id="unread" class="btn btn-outline-secondary unread btn-sm ml-2">Mark unread</button>
                 <button type="button" style="display:none" id="del" class="btn btn-outline-success btn-sm del ml-2">Delete</button>
               </div>
               </th>
-              <th id="col_head" scope="col"></th>
+              <!-- <th id="col_head" scope="col"></th>
               <th id="col_head" scope="col">xyz@gmail.mailer.com</th>
               <th id="col_head" scope="col">Email Subject</th>
               <th id="col_head" scope="col">YY/MM/DD</th>
-              <th id="col_head" scope="col"></th>
+              <th id="col_head" scope="col"></th> -->
               </tr>
               </thead>
               <tbody id="load-table">
@@ -223,77 +231,77 @@ include 'header.php';
 <script>
   $(document).ready(function() {
     Inboxemail();
-    $(document).on("click", ".rowclick", function(e) {
-      e.stopPropagation();
-      $("#load-table").html("");
-      var trval = $(this).attr("data-id");
-      // alert(trval);
-      $.ajax({
-        url: "show_email_one.php",
-        type: "post",
-        dataType: 'json',
-        data: {
-          id: trval
-        },
-        success: function(data) {
-          $("th").hide();
-          $("#checkall").hide();
-          if (data.status == false) {
-            $("#load-table").html("<h3>" + data.msg + "</h3>");
-          } else {
-            var table = '';
-            $.each(data, function(index, value) {
-              table += '<div class="container">';
-              table += '<div class="row">';
-              table += '<div class="card w-100">';
-              table += '<h5 class="card-header">' + value.subject + '</h5>';
-              table += ' <div class="card-body ">';
-              table += '<div class="row p-5">';
-              table += '<div class="col-sm-4">';
-              table += '<p>from:-' + value.sender_email + '</p>';
-              table += '<p>To:-' + value.reciver_email + '</p>';
-              table += '</div>';
-              table += '<div class="col-sm-4"></div>';
-              table += '<div class="col-sm-4">' + value.datetime + '</div>';
-              table += '</div>';
+    // $(document).on("click", ".rowclick", function(e) {
+    //   e.stopPropagation();
+    //   $("#load-table").html("");
+    //   var trval = $(this).attr("data-id");
+    //   // alert(trval);
+    //   $.ajax({
+    //     url: "show_email_one.php",
+    //     type: "post",
+    //     dataType: 'json',
+    //     data: {
+    //       id: trval
+    //     },
+    //     success: function(data) {
+    //       $("th").hide();
+    //       $("#checkall").hide();
+    //       if (data.status == false) {
+    //         $("#load-table").html("<h3>" + data.msg + "</h3>");
+    //       } else {
+    //         var table = '';
+    //         $.each(data, function(index, value) {
+    //           table += '<div class="container">';
+    //           table += '<div class="row">';
+    //           table += '<div class="card w-100">';
+    //           table += '<h5 class="card-header">' + value.subject + '</h5>';
+    //           table += ' <div class="card-body ">';
+    //           table += '<div class="row p-5">';
+    //           table += '<div class="col-sm-4">';
+    //           table += '<p>from:-' + value.sender_email + '</p>';
+    //           table += '<p>To:-' + value.reciver_email + '</p>';
+    //           table += '</div>';
+    //           table += '<div class="col-sm-4"></div>';
+    //           table += '<div class="col-sm-4">' + value.datetime + '</div>';
+    //           table += '</div>';
 
-              table += '<div class="row p-5">';
-              table += '<div class="col-sm-4">';
-              table += '<h4>' + value.attechment + '</h4>';
-              table += '<p>hello.pnj</p>';
-              table += '</div>';
-              table += '<div class="col-sm-4"></div>';
-              table += '<div class="col-sm-4"></div>';
-              table += '</div>';
+    //           table += '<div class="row p-5">';
+    //           table += '<div class="col-sm-4">';
+    //           table += '<h4>' + value.attechment + '</h4>';
+    //           table += '<p>hello.pnj</p>';
+    //           table += '</div>';
+    //           table += '<div class="col-sm-4"></div>';
+    //           table += '<div class="col-sm-4"></div>';
+    //           table += '</div>';
 
-              table += '</div>';
-              table += ' </div>';
-              table += '</div>';
-              table += '</div>';
+    //           table += '</div>';
+    //           table += ' </div>';
+    //           table += '</div>';
+    //           table += '</div>';
 
-            });
+    //         });
 
-            $("#load-table").append(table);
-          }
-        }
-      });
+    //         $("#load-table").append(table);
+    //       }
+    //     }
+    //   });
 
-    });
+    // });
 
 
     // total check count 
 
-    $(document).on("click", "#checkall", function(e) {
-      e.stopPropagation();
-      var isChecked = $(this).is(':checked');
-      var numberOfChecked = $(':checked').length;
-      console.log(numberOfChecked);
-      var totalCheckboxes = $('input:check').length;
-      var numberNotChecked = totalCheckboxes - numberOfChecked;
-      console.log(numberNotChecked);
-      console.log(totalCheckboxes);
+    // $(document).on("click", "#checkall", function(e) {
+    //   e.stopPropagation();
+    //   var isChecked = $(this).is(':checked');
+    //   var numberOfChecked = $(':checked').length;
+    //   console.log(numberOfChecked);
+    //   var totalCheckboxes = $('input:check').length;
+    //   var numberNotChecked = totalCheckboxes - numberOfChecked;
+    //   console.log(numberNotChecked);
+    //   console.log(totalCheckboxes);
 
-    });
+    // });
 
 
     $(document).on("click", ".check", function(e) {
@@ -353,8 +361,11 @@ include 'header.php';
     });
 
     // Trash Email by Sender
-    $(document).on("click", ".attrIdsender", function(e) {
+    $(document).on("click", ".attrIdsender", function(event) {
+      event.stopPropagation();
       var id = $(this).attr("data-id");
+
+     
       $.ajax({
         url: 'Trash_email_by_sender.php',
         type: 'post',
@@ -370,7 +381,8 @@ include 'header.php';
 
     // Trash Email by Reciver
 
-    $(document).on("click", ".attrIdreciver", function(e) {
+    $(document).on("click", ".attrIdreciver", function(event) {
+      event.stopPropagation();
       var id = $(this).attr("data-id");
 
       $.ajax({
@@ -551,10 +563,36 @@ include 'header.php';
       $(document).on("click", "#pagination a", function(e) {
         event.preventDefault();
         var page_id = $(this).attr("id");
-        sendbuttonload(page_id);
+        draftbuttonload(page_id);
       });
     });
 
+
+// serching pagination
+    function serchingbtn(page) {
+      $("th").show();
+      // $("#checkall").show();
+      $("#load-table").html("");
+      $.ajax({
+        url: "live_search.php",
+        type: "POST",
+        data: {
+          page_no: page
+        },
+        success: function(data) {
+          $("#load-table").html(data);
+        }
+      });
+    }
+
+    $(".navbar-search").on("keyup",function() {
+      serchingbtn();
+      $(document).on("click", "#pagination a", function(e) {
+        event.preventDefault();
+        var page_id = $(this).attr("id");
+        serchingbtn(page_id);
+      });
+    });
 
     $(".close").on("click", function() {
       event.preventDefault();
@@ -671,7 +709,7 @@ include 'header.php';
       $(document).on("click", "#pagination a", function(e) {
         e.preventDefault();
         var page_id = $(this).attr("id");
-        sendbuttonload(page_id);
+        trashbuttonload(page_id);
       });
     });
 
@@ -691,17 +729,8 @@ include 'header.php';
           search: search_term
         },
         success: function(data) {
-          var res = JSON.parse(data);
-          if (res.message == "html_data_found") {
-            console.log(res.tablehtml);
-            $("#load-table").html('');
-            $("#load-table").html(res.tablehtml);
+          $("#load-table").html(data);
 
-          }
-          if (res.status == false) {
-            $("#load-table").html('');
-            $("#load-table").html(res.message);
-          }
         }
       });
     });

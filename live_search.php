@@ -15,37 +15,35 @@ if(isset($_POST['page_no'])){
 
  $search_value = $_POST["search"];
 $sql = "SELECT * FROM All_emails WHERE  subject like '%$search_value%' ORDER BY id DESC LIMIT {$offset},{$limit_per_page}";
- $result = $gobj->mysqli->query($sql) or die("sql query failed");
- $row =$result->fetch_all(MYSQLI_ASSOC);
+
+$result = $gobj->mysqli->query($sql) or die("Query failed");
 $output = "";
+if ($result->num_rows > 0) {
 
-if($result->num_rows > 0){
-  foreach($row as $key => $val){
-    $output .="<tr>
-                <td><input type='checkbox'></td>
-                <td>".$val["reciver_email"]."</td>
-                <td>".$val["subject"]."</td>
-                <td>".$val["datetime"]."</td>
-                </tr>";
-  } 
+    $output .= '<table>';
 
-  $sql = "SELECT * FROM All_emails WHERE reciver_email='$login_user' AND reciver_status=1 ";
-  $result = $gobj->mysqli->query($sql)or die("Query failed");
-  $total_record =($result->num_rows >0);
-  $total_pages =ceil($total_record/$limit_per_page);   
-  $output .='<div id="pagination" class="d-flex">';
-      for($i=1; $i <= $total_pages; $i++){
-          $output.="<a class='page-link' id='{$i}' href='#'>{$i}</a>";
-      }
-$output .='</div>';
+    while ($row = $result->fetch_assoc()) {
 
-  echo json_encode(["status" => true, "message" => "html_data_found", "tablehtml" => $output]);
-
-}else{
-  echo json_encode(["status" => false, "message" => "Data Not found"]);
-  
- }
+        $output .= "<tr class='rowclick' data-id='{$row["id"]}'><td><input type='checkbox' class='check' data-id='{$row["id"]}'></td><td>{$row["reciver_email"]}</td><td>{$row["subject"]}</td><td>{$row["datetime"]}</td></tr>";
+    }
+    $output .= "</table>";
 
 
+    $sql = "SELECT * FROM All_emails WHERE  subject like '%$search_value%'";
+
+    $result = $gobj->mysqli->query($sql) or die("Query failed");
+    $total_record = mysqli_num_rows($result);
+    // echo $total_record;
+    $total_pages = ceil($total_record / $limit_per_page);
+    // echo $total_pages;
+    $output .= '<div id="pagination" class="d-flex">';
+    for ($i = 1; $i <= $total_pages; $i++) {
+        $output .= "<a class='page-link' id='{$i}' href='#'>{$i}</a>";
+    }
+    $output .= '</div>';
+    echo $output;
+} else {
+    echo "No Record Found";
+}
 
 ?>

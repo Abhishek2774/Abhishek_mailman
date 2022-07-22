@@ -27,6 +27,7 @@ if (isset($_POST['submit'])) {
 
     $result = $gobj->mysqli->query($query);
     if ($result) {
+        header("Refresh:0");
         echo   '<script>alert("Update Successfull.");</script>';
     } else {
         echo   '<script>alert("NOT Update.");</script>';

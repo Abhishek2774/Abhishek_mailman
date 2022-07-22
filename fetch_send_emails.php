@@ -21,18 +21,27 @@ if(isset($_POST['page_no'])){
     $output = "";
     if($result->num_rows > 0){
 
-        $output.='<table>';
+        $output.='<table>
+        <tr>
+        <th id="col_head" scope="col"><h4>Sent</h4></th>
+        <th id="col_head" scope="col">Sender@mailman.com</th>
+        <th id="col_head" scope="col">Email Subject</th>
+        <th id="col_head" scope="col">YY/MM/DD</th>
+        <th id="col_head" scope="col"></th>
+        </tr>';
 
     while($row=$result->fetch_assoc()){
     
-        $output .="<tr class='rowclick' data-id='{$row["id"]}'><td><input type='checkbox' class='check' data-id='{$row["id"]}'></td><td>{$row["reciver_email"]}</td><td>{$row["subject"]}</td><td>{$row["datetime"]}</td><td><i class='fa fa-trash fa-lg attrIdreciver' data-id='{$row["id"]}' aria-hidden='true'></i></td></tr>";
+        $output .="<tr class='rowclick' data-id='{$row["id"]}'><td><input type='checkbox' class='check' data-id='{$row["id"]}'></td><td>{$row["reciver_email"]}</td><td>{$row["subject"]}</td><td>{$row["datetime"]}</td></tr>";
     }
     $output .="</table>";
 
     $sql = "SELECT * FROM All_emails  WHERE sender_email='$login_user' AND sender_status=1";
     $result = $gobj->mysqli->query($sql)or die("Query failed");
     $total_record = mysqli_num_rows($result);
+    // echo $total_record;
     $total_pages = ceil($total_record/$limit_per_page);
+    // echo $total_pages;
     $output .='<div id="pagination" class="d-flex">';
         for($i=1; $i <= $total_pages; $i++){
             $output.="<a class='page-link' id='{$i}' href='#'>{$i}</a>";

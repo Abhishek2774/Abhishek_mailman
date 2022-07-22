@@ -18,13 +18,13 @@ if (isset($_POST['submit'])) {
   $pass = $_POST['pass'];
   $cpass = $_POST['cpass'];
   $image = $_FILES['image'];
- 
+
   if ($fname == '' and $fname == null) {
     $error['f_error'] = 'Please Enter fname Name';
   } else if (!preg_match($namepattern, $fname)) {
     $error['f_error'] = 'Only letters allowed';
   } else {
-    $error['f_error']='';
+    $error['f_error'] = '';
   }
 
   if ($lname == '' and $lname == null) {
@@ -32,14 +32,14 @@ if (isset($_POST['submit'])) {
   } else if (!preg_match($namepattern, $lname)) {
     $errorerror['l_error'] = 'Only letters allowed';
   } else {
-    $error['l_error']='';
+    $error['l_error'] = '';
   }
 
-  if ($username == null and $username=='') {
+  if ($username == null and $username == '') {
     $error['user_error'] = 'Please fill  User Name';
   } else {
-     $sql = "SELECT username FROM Reg_userid   WHERE username  = '$username'";
-     $result = $gobj->mysqli->query($sql);
+    $sql = "SELECT username FROM Reg_userid   WHERE username  = '$username'";
+    $result = $gobj->mysqli->query($sql);
     if ($result->num_rows > 0) {
       $error['user_error'] = 'Username already Exist';
     } else {
@@ -47,11 +47,11 @@ if (isset($_POST['submit'])) {
     }
   }
 
-   if(!preg_match($primary_email, $email)){
+  if (!preg_match($primary_email, $email)) {
     $email = $_POST['email'] . "@mailman.com";
-  }else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $error['email_error'] = 'email address not valid';
-  } else{
+  } else {
     $sql = "SELECT email from Reg_userid where email = '$email'";
     $result = $gobj->mysqli->query($sql);
     if ($result->num_rows > 0) {
@@ -59,10 +59,9 @@ if (isset($_POST['submit'])) {
     } else {
       $error['email_error'] = '';
     }
-
   }
 
- if (!preg_match($recover_pattern, $remail)) {
+  if (!preg_match($recover_pattern, $remail)) {
     $error['remail_error'] = 'Invalid Email';
   } else {
     $error['remail_error'] = '';
@@ -81,12 +80,16 @@ if (isset($_POST['submit'])) {
     $error['cpass_error'] = '';
   }
 
+  // $uploaddir = '../upload';
+  //     $uploadfile = $uploaddir . basename($_FILES['image']['name']);
+  //     $folder = move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile);
 
-  $path="../upload/";
-  $temp_name = $image['tmp_name'];
+
+
+  $uploaddir = '../upload';
+  $uploadfile = $uploaddir . basename($_FILES['image']['name']);
   $name = $image['name'];
-   $path = $path . "/" . $name;
-    if ($image != null) {
+  if ($image != null) {
     $allowed =  array('jpeg', 'jpg', 'png', 'JPEG', 'JPG', 'PNG');
     $ext = pathinfo($image['name'], PATHINFO_EXTENSION);
     if (!in_array($ext, $allowed)) {
@@ -94,21 +97,21 @@ if (isset($_POST['submit'])) {
     } else if ($image['name']['size'] > 200000) {
       $error['imgid'] = 'size should be less than 2 kb';
     } else {
-      move_uploaded_file($temp_name, $path);
+      move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile);
       $error['imgid'] = '';
     }
   }
 
 
-$count=0;
-foreach ( $error as $key => $value ) {
-  if($value != ''){
-    $count=1;
-    break;
+  $count = 0;
+  foreach ($error as $key => $value) {
+    if ($value != '') {
+      $count = 1;
+      break;
+    }
   }
-}
 
-  if ($count==1) {
+  if ($count == 1) {
     echo json_encode(
       [
         "arrayvalue" => $error,
@@ -117,26 +120,23 @@ foreach ( $error as $key => $value ) {
     );
   } else {
 
-          $data = [
-                'fname' => $_POST["fname"],
-                'lname' => $_POST["lname"],
-                'username' => $_POST["username"],
-                'email' => $_POST["email"],
-                'remail' => $_POST["remail"],
-                'pass' => $_POST["pass"],
-                'cpass' => $_POST["cpass"],
-                'image' => $name,
-                't_condition' => $_POST["checkbox"]
-                      
-                  ];  
-      
-                  if($gobj->insert('Reg_userid',$data)){
-                      $result = $gobj->getResult(); 
-                      echo json_encode(["response" => true, "type" => "user_registered", "message" => "Your account created successfully."]); exit;
-                        
-                  }
-   
-  }
+    $data = [
+      'fname' => $_POST["fname"],
+      'lname' => $_POST["lname"],
+      'username' => $_POST["username"],
+      'email' => $_POST["email"],
+      'remail' => $_POST["remail"],
+      'pass' => $_POST["pass"],
+      'cpass' => $_POST["cpass"],
+      'image' => $name,
+      't_condition' => $_POST["checkbox"]
 
- 
+    ];
+
+    if ($gobj->insert('Reg_userid', $data)) {
+      $result = $gobj->getResult();
+      echo json_encode(["response" => true, "type" => "user_registered", "message" => "Your account created successfully."]);
+      exit;
+    }
+  }
 }
