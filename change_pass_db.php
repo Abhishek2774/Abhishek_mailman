@@ -24,7 +24,7 @@ if(Validate::is_valid_password($newpass))
     echo json_encode(["status"=> false, "message"=> "password shuld be grater then 6"]);exit;
 }else{
 
-        $sql = "UPDATE Reg_userid SET pass='$newpass' WHERE email='$login_Email'";
+        $sql = "UPDATE Reg_userid SET pass='$newpass', cpass='$newpass' WHERE email='$login_Email'";
         $data = $gobj->mysqli->query($sql);
     echo json_encode(["status"=> true, "message" => "Password are successfully update"]); exit;   
 }

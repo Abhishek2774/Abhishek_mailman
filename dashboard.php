@@ -44,7 +44,7 @@ include 'header.php';
     float: right;
   }
 
-  .dropdown-menu {
+  .dropdown-menu-right {
     right: 0px !important;
     left: auto !important;
   }
@@ -59,6 +59,15 @@ include 'header.php';
   .bold {
     font-weight: bold;
     font-size: large;
+  }
+
+  .reads {
+    font-weight: normal;
+
+  }
+
+  .unreads {
+    font-weight: bold;
   }
 </style>
 </head>
@@ -76,7 +85,10 @@ include 'header.php';
         </div>
 
         <div class="btn-group">
-          <img src="<?php echo $profile['image']; ?>" alt="not found" width="50" height="50" class="rounded-circle border border-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <?php
+          $profile_url = !empty($profile['image']) ? $profile['image'] : 'image/login.jpeg';
+          ?>
+          <img src="<?php echo  $profile_url; ?>" alt="not found" width="50" height="50" class="rounded-circle border border-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <ul class="dropdown-menu dropdown-menu-right">
             <li><a class="dropdown-item" data-toggle="modal" data-target=".bd-example-modal-lg" href="#one">Profile</a></li>
             <li><a class="dropdown-item" href="logout.php">Logout</a></li>
@@ -105,22 +117,17 @@ include 'header.php';
       <div class="card mx-5 flex">
         <div class="card-body flex">
           <div id="table-data">
-            <table class="table table-hover flex>
-            <thead>
-              <tr>
-                <th class=" col">
-              <div class='d-flex m-2'>
-                <button type="button" style="display:none" id="read" class="btn btn-outline-primary read  btn-sm ml-3">Mark read</button>
-                <button type="button" style="display:none" id="unread" class="btn btn-outline-secondary unread btn-sm ml-2">Mark unread</button>
-                <button type="button" style="display:none" id="del" class="btn btn-outline-success btn-sm del ml-2">Delete</button>
-              </div>
-              </th>
-              <!-- <th id="col_head" scope="col"></th>
-              <th id="col_head" scope="col">xyz@gmail.mailer.com</th>
-              <th id="col_head" scope="col">Email Subject</th>
-              <th id="col_head" scope="col">YY/MM/DD</th>
-              <th id="col_head" scope="col"></th> -->
-              </tr>
+            <table class="table table-hover flex">
+              <thead>
+                <tr>
+                  <!-- <th class=""> -->
+                  <div class='d-flex m-2'>
+                    <button type="button" style="display:none" id="read" class="btn btn-outline-primary read  btn-sm ml-3">Mark read</button>
+                    <button type="button" style="display:none" id="unread" class="btn btn-outline-secondary unread btn-sm ml-2">Mark unread</button>
+                    <button type="button" style="display:none" id="del" class="btn btn-outline-success btn-sm del ml-2">Delete</button>
+                  </div>
+                  <!-- </th> -->
+                </tr>
               </thead>
               <tbody id="load-table">
 
@@ -181,7 +188,7 @@ include 'header.php';
     <div class="modal-content">
       <div class="card">
         <div class="card-header">
-          Profile 
+          Profile
         </div>
         <div class="card-body">
           <div class="row py-5">
@@ -215,10 +222,8 @@ include 'header.php';
           </div>
         </div>
         <div class="card-footer">
-          <div class="row">
-            <a href="Edit_profile.php" class="pl-5">Edit Profile</a>
-            <a href="new_password.php" class="pl-3">Change Password</a>
-          </div>
+          <a href="Edit_profile.php">Edit Profile</a>
+          <a href="new_password.php" class="pl-3 ">Change Password</a>
         </div>
       </div>
     </div>
@@ -231,62 +236,70 @@ include 'header.php';
 <script>
   $(document).ready(function() {
     Inboxemail();
-    // $(document).on("click", ".rowclick", function(e) {
-    //   e.stopPropagation();
-    //   $("#load-table").html("");
-    //   var trval = $(this).attr("data-id");
-    //   // alert(trval);
-    //   $.ajax({
-    //     url: "show_email_one.php",
-    //     type: "post",
-    //     dataType: 'json',
-    //     data: {
-    //       id: trval
-    //     },
-    //     success: function(data) {
-    //       $("th").hide();
-    //       $("#checkall").hide();
-    //       if (data.status == false) {
-    //         $("#load-table").html("<h3>" + data.msg + "</h3>");
-    //       } else {
-    //         var table = '';
-    //         $.each(data, function(index, value) {
-    //           table += '<div class="container">';
-    //           table += '<div class="row">';
-    //           table += '<div class="card w-100">';
-    //           table += '<h5 class="card-header">' + value.subject + '</h5>';
-    //           table += ' <div class="card-body ">';
-    //           table += '<div class="row p-5">';
-    //           table += '<div class="col-sm-4">';
-    //           table += '<p>from:-' + value.sender_email + '</p>';
-    //           table += '<p>To:-' + value.reciver_email + '</p>';
-    //           table += '</div>';
-    //           table += '<div class="col-sm-4"></div>';
-    //           table += '<div class="col-sm-4">' + value.datetime + '</div>';
-    //           table += '</div>';
+    $(document).on("click", ".rowclick", function(e) {
+      e.stopPropagation();
+      $("#load-table").html("");
+      var trval = $(this).attr("data-id");
+      // alert(trval);
+      $.ajax({
+        url: "show_email_one.php",
+        type: "post",
+        dataType: 'json',
+        data: {
+          id: trval
+        },
+        success: function(data) {
+          $("th").hide();
+          $("#checkall").hide();
+          if (data.status == false) {
+            $("#load-table").html("<h3>" + data.msg + "</h3>");
+          } else {
+            var table = '';
+            $.each(data, function(index, value) {
+              table += '<div class="container">';
+              table += '<div class="row">';
+              table += '<div class="card w-100">';
+              table += '<h5 class="card-header">Featured</h5>';
+              table += '<div class="card-body">';
+              table += ' <div class="row">';
+              table += '<div class="col-sm-6">';
+              table += '<h5 class="card-title">Special title treatment';
+              table += ' <div class="btn-group">';
+              table += '<button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">';
+              table += ' <span class="visually-hidden">Toggle Dropdown</span>';
+              table += '</button>';
+              table += '<ul class="dropdown-menu">';
+              table += '<li><a class="dropdown-item" href="#">From: </a></li>';
+              table += '<li><a class="dropdown-item" href="#">To: </a></li>';
+              table += '<li><a class="dropdown-item" href="#">Date: </a></li>';
+              table += '<li><a class="dropdown-item" href="#">Subject: </a></li>';
+              table += '</ul>';
+              table += '</div>';
+              table += '</h5>';
 
-    //           table += '<div class="row p-5">';
-    //           table += '<div class="col-sm-4">';
-    //           table += '<h4>' + value.attechment + '</h4>';
-    //           table += '<p>hello.pnj</p>';
-    //           table += '</div>';
-    //           table += '<div class="col-sm-4"></div>';
-    //           table += '<div class="col-sm-4"></div>';
-    //           table += '</div>';
+              table += '<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>';
+              table += '<a href="' + value.attechment + '" class="card-text d-block mb-3" download>' + value.attechment + '</a>';
 
-    //           table += '</div>';
-    //           table += ' </div>';
-    //           table += '</div>';
-    //           table += '</div>';
+              table += '<a id="reply" class="btn btn-primary">Reply</a>';
+              table += '<a id="replyall" class="btn btn-primary ml-3">Reply All</a>';
+              table += '</div>';
+              table += '<div class="col-sm-6">';
+              table += '<p class="float-end">Date: 10/07/2022</p>';
+              table += '</div>';
+              table += '</div>';
+              table += '</div>';
+              table += '</div>';
+              table += '</div>';
+              table += '</div>';
 
-    //         });
+            });
 
-    //         $("#load-table").append(table);
-    //       }
-    //     }
-    //   });
+            $("#load-table").append(table);
+          }
+        }
+      });
 
-    // });
+    });
 
 
     // total check count 
@@ -303,13 +316,69 @@ include 'header.php';
 
     // });
 
+    // read/unread
+
+
+    $(document).on("change", ".check", function(e) {
+      e.stopPropagation();
+
+      var isChecked = $(this).is(':checked');
+      var check_id = $(this).attr("data-id");
+      // alert(check_id);
+      var checked_all_array = [];
+
+      $(".check:checked").each(function() {
+        checked_all_array.push($(this).attr("data-id"));
+      });
+
+
+
+      $('.read').click(function(e) {
+
+
+        e.preventDefault();
+        $.ajax({
+          type: "post",
+          url: "readunread.php",
+          data: {
+            'message_id': checked_all_array
+          },
+          dataType: "json",
+          success: function(response) {
+
+          }
+        });
+
+        location.reload()
+      });
+
+      $('.unread').click(function(e) {
+
+
+        e.preventDefault();
+        $.ajax({
+          type: "post",
+          url: "unread.php",
+          data: {
+            'message_id': checked_all_array
+          },
+          dataType: "json",
+          success: function(response) {
+
+          }
+        });
+
+        location.reload()
+      });
+
+    });
+
 
     $(document).on("click", ".check", function(e) {
       e.stopPropagation();
-      var isChecked = $(this).is(':checked');
-      // console.log(isChecked);
-      var check_id = $(this).attr("data-id");
 
+      var isChecked = $(this).is(':checked');
+      var check_id = $(this).attr("data-id");
 
       if (isChecked == true) {
         $(".del, .read, .unread").show();
@@ -365,7 +434,7 @@ include 'header.php';
       event.stopPropagation();
       var id = $(this).attr("data-id");
 
-     
+
       $.ajax({
         url: 'Trash_email_by_sender.php',
         type: 'post',
@@ -568,7 +637,7 @@ include 'header.php';
     });
 
 
-// serching pagination
+    // serching pagination
     function serchingbtn(page) {
       $("th").show();
       // $("#checkall").show();
@@ -585,7 +654,7 @@ include 'header.php';
       });
     }
 
-    $(".navbar-search").on("keyup",function() {
+    $(".navbar-search").on("keyup", function() {
       serchingbtn();
       $(document).on("click", "#pagination a", function(e) {
         event.preventDefault();

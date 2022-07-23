@@ -52,7 +52,8 @@ include "autoload";
                     </div>
                     <div class="col-md-4 order-2">
                         <img src="image/login.jpeg" alt="not found" style="height:120px" , width="120px">
-                        <input type="file" id="image" name="image">
+                        <input type="file" id="image" name="image" onchange="readURL(this);">
+                        <img id="blah" src="https://via.placeholder.com/150/FFFFFF/FFFFFF/?text=IPaddress.netC/O https://placeholder.com/" alt="your image" / height="120px" width="120px" style="padding:10px;">
                         <span id='imgid' class="text-danger"></span>
                     </div>
 
@@ -66,8 +67,21 @@ include "autoload";
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    $(document).ready(function() {
+ function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
+                reader.onload = function (e) {
+                    $('#blah')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+    $(document).ready(function() {
         $("#formdata").on("submit", function(e) {
             e.preventDefault();
             var fname = $("#fname").val();
@@ -93,6 +107,14 @@ include "autoload";
             form_data.append('cpass', cpass)
             form_data.append('checkbox', checkbox);
 
+            var isChecked = $("#checkbox").is(':checked');
+            console.log(isChecked);
+            if(isChecked == false){
+                $("#check_error").html('<p class="text-danger">please checked it </p>'); return false;
+            }else{
+                $("#check_error").html('');
+
+            }
 
             $.ajax({
                 url: "reg_user.php",
@@ -116,10 +138,14 @@ include "autoload";
                         $("#l_error").html(''); 
                         $("#user_error").html(''); 
                         $("#email_error").html(''); 
-                        $("#imgid").html(''); 
+                        $("#blah").attr("src","https://via.placeholder.com/150/FFFFFF/FFFFFF/?text=IPaddress.netC/O https://placeholder.com/");
                         $("#remail_error").html('');
+                        $("#pass_error").html('');
+                        $("#cpass_error").html('');
                         $('.success').html('<p class="alert alert-success">'+data.message+'</p>');
                         $('#formdata')[0].reset();
+                          $("#check_error").html('');
+
                       
                     }
                     

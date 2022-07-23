@@ -18,6 +18,8 @@ if (isset($_POST['submit'])) {
   $pass = $_POST['pass'];
   $cpass = $_POST['cpass'];
   $image = $_FILES['image'];
+  $check = $_POST['checkbox'];
+
 
   if ($fname == '' and $fname == null) {
     $error['f_error'] = 'Please Enter fname Name';
@@ -28,13 +30,12 @@ if (isset($_POST['submit'])) {
   }
 
   if ($lname == '' and $lname == null) {
-    $error['l_error'] = 'Please Enter last Name';
+    $error['l_error'] = 'Please Enter last  Name';
   } else if (!preg_match($namepattern, $lname)) {
-    $errorerror['l_error'] = 'Only letters allowed';
+    $error['l_error'] = 'Only letters allowed';
   } else {
     $error['l_error'] = '';
   }
-
   if ($username == null and $username == '') {
     $error['user_error'] = 'Please fill  User Name';
   } else {
@@ -80,28 +81,26 @@ if (isset($_POST['submit'])) {
     $error['cpass_error'] = '';
   }
 
-  // $uploaddir = '../upload';
-  //     $uploadfile = $uploaddir . basename($_FILES['image']['name']);
-  //     $folder = move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile);
 
 
 
-  $uploaddir = '../upload';
-  $uploadfile = $uploaddir . basename($_FILES['image']['name']);
+
+  $path="../upload";
+  $temp_name = $image['tmp_name'];
   $name = $image['name'];
+  $dirpath = $path . $name;
   if ($image != null) {
-    $allowed =  array('jpeg', 'jpg', 'png', 'JPEG', 'JPG', 'PNG');
+    $allowed =  array('jpeg', 'jpg', 'png', 'JPEG', 'JPG', 'PNG', 'GIF');
     $ext = pathinfo($image['name'], PATHINFO_EXTENSION);
     if (!in_array($ext, $allowed)) {
-      $error['imgid'] = 'Please upload valid image';
+     $errid['imgid'] = 'Please updload valid image';
     } else if ($image['name']['size'] > 200000) {
-      $error['imgid'] = 'size should be less than 2 kb';
+      $errid['imgid'] = 'size should be less than 2 kb';
     } else {
-      move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile);
-      $error['imgid'] = '';
+      move_uploaded_file($temp_name, $dirpath);
+      $errid['imgid']='';
     }
   }
-
 
   $count = 0;
   foreach ($error as $key => $value) {
@@ -128,7 +127,7 @@ if (isset($_POST['submit'])) {
       'remail' => $_POST["remail"],
       'pass' => $_POST["pass"],
       'cpass' => $_POST["cpass"],
-      'image' => $name,
+      'image' => $dirpath,
       't_condition' => $_POST["checkbox"]
 
     ];

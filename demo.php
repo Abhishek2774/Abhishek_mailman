@@ -735,3 +735,34 @@ if ($lname == '' and $lname == null) {
   //   $obj->insert($w);
   //   echo json_encode(['response' => true]);
   // }
+
+  ....................................... 
+
+
+  table += '<div class="container">';
+              table += '<div class="row">';
+              table += '<div class="card w-100">';
+              table += '<h5 class="card-header">' + value.subject + '</h5>';
+              table += ' <div class="card-body ">';
+              table += '<div class="row p-5">';
+              table += '<div class="col-sm-4">';
+              table += '<p>from:-' + value.sender_email + '</p>';
+              table += '<p>To:-' + value.reciver_email + '</p>';
+              table += '</div>';
+              table += '<div class="col-sm-4"></div>';
+              table += '<div class="col-sm-4">' + value.datetime + '</div>';
+              table += '</div>';
+
+              table += '<div class="row p-5">';
+              table += '<div class="col-sm-4">';
+              table += '<h4>' + value.attechment + '</h4>';
+              table += '<p>hello.pnj</p>';
+              table += '</div>';
+              table += '<div class="col-sm-4"></div>';
+              table += '<div class="col-sm-4"></div>';
+              table += '</div>';
+
+              table += '</div>';
+              table += ' </div>';
+              table += '</div>';
+              table += '</div>';

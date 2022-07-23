@@ -32,8 +32,8 @@ if(isset($_POST['page_no'])){
         ';
 
     while($row=$result->fetch_assoc()){
-    
-        $output .="<tr class='rowclick' data-id='{$row["id"]}'><td><input type='checkbox' class='check' data-id='{$row["id"]}'></td><td>{$row["sender_email"]}</td><td>{$row["subject"]}</td><td>{$row["datetime"]}</td></tr>";
+        $read = $row['receiver_read_status'] == 1 ? 'reads' : 'unreads';
+        $output .="<tr class='rowclick $read'  data-id='{$row["id"]}'><td><input type='checkbox' class='check' data-id='{$row["id"]}'></td><td>{$row["sender_email"]}</td><td>{$row["subject"]}</td><td>{$row["datetime"]}</td></tr>";
     }
     $output .="</table>";
 
