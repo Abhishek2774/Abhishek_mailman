@@ -95,7 +95,7 @@ if (isset($_POST['submit'])) {
 
 
 
-  $target_dir="upload/";
+  $target_dir="../image/";
   $temp_name = $image['tmp_name'];
   $name =$_FILES['image']['name'];
   $target_file = $target_dir . basename($_FILES['image']['name']);
