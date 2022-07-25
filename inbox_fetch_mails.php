@@ -33,7 +33,8 @@ if(isset($_POST['page_no'])){
 
     while($row=$result->fetch_assoc()){
         $read = $row['receiver_read_status'] == 1 ? 'reads' : 'unreads';
-        $output .="<tr class='rowclick $read'  data-id='{$row["id"]}'><td><input type='checkbox' class='check' data-id='{$row["id"]}'></td><td>{$row["sender_email"]}</td><td>{$row["subject"]}</td><td>{$row["datetime"]}</td></tr>";
+        $subject = $row['subject'] == $row['subject'] ? $row['subject'] : 'No Subject';
+        $output .="<tr class='rowclick $read'  data-id='{$row["id"]}'><td><input type='checkbox' class='check' data-id='{$row["id"]}'></td><td>{$row["sender_email"]}</td><td>$subject</td><td>{$row["datetime"]}</td></tr>";
     }
     $output .="</table>";
 
@@ -51,6 +52,4 @@ if(isset($_POST['page_no'])){
         echo $output;
 }else{
     echo "No Record Found";
-} 
- 
-?>
+}

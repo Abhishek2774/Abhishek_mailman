@@ -69,6 +69,9 @@ include 'header.php';
   .unreads {
     font-weight: bold;
   }
+  #msg{
+    white-space: pre-wrap; 
+  }
 </style>
 </head>
 
@@ -86,9 +89,9 @@ include 'header.php';
 
         <div class="btn-group">
           <?php
-          $profile_url = !empty($profile['image']) ? $profile['image'] : 'image/login.jpeg';
+          $profile_url = !empty($profile['image']) ? $profile['image'] : 'login.jpeg';
           ?>
-          <img src="<?php echo  $profile_url; ?>" alt="not found" width="50" height="50" class="rounded-circle border border-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img src="<?php echo   'image/'.$profile_url; ?>" alt="not found" width="50" height="50" class="rounded-circle border border-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <ul class="dropdown-menu dropdown-menu-right">
             <li><a class="dropdown-item" data-toggle="modal" data-target=".bd-example-modal-lg" href="#one">Profile</a></li>
             <li><a class="dropdown-item" href="logout.php">Logout</a></li>
@@ -217,7 +220,10 @@ include 'header.php';
               </table>
             </div>
             <div class="col-sm-4 order-2">
-              <img src="<?php echo $profile['image']; ?>" width="150px" height="150px" class="rounded-circle border border-primary" alt="NOT found">
+              <?php
+              $profile_url = !empty($profile['image']) ? $profile['image'] : 'login.jpeg';
+              ?>
+              <img src="<?php echo  'image/'.$profile_url; ?>" width="150px" height="150px" class="rounded-circle border border-primary" alt="NOT found">
             </div>
           </div>
         </div>
@@ -259,32 +265,32 @@ include 'header.php';
               table += '<div class="container">';
               table += '<div class="row">';
               table += '<div class="card w-100">';
-              table += '<h5 class="card-header">Featured</h5>';
+              table += '<h5 class="card-header">' + value.subject + '</h5>';
               table += '<div class="card-body">';
               table += ' <div class="row">';
               table += '<div class="col-sm-6">';
-              table += '<h5 class="card-title">Special title treatment';
+              table += '<h5 class="card-title">' + value.reciver_email + '';
               table += ' <div class="btn-group">';
               table += '<button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">';
               table += ' <span class="visually-hidden">Toggle Dropdown</span>';
               table += '</button>';
               table += '<ul class="dropdown-menu">';
-              table += '<li><a class="dropdown-item" href="#">From: </a></li>';
-              table += '<li><a class="dropdown-item" href="#">To: </a></li>';
-              table += '<li><a class="dropdown-item" href="#">Date: </a></li>';
-              table += '<li><a class="dropdown-item" href="#">Subject: </a></li>';
+              table += '<li><a class="dropdown-item" href="#">From: ' + value.sender_email + ' </a></li>';
+              table += '<li><a class="dropdown-item" href="#">To: ' + value.reciver_email + '</a></li>';
+              table += '<li><a class="dropdown-item" href="#">Date: ' + value.datetime + ' </a></li>';
+              table += '<li><a class="dropdown-item" href="#">Subject: ' + value.subject + '</a></li>';
               table += '</ul>';
               table += '</div>';
               table += '</h5>';
-
-              table += '<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>';
+              
+              table += '<p class="card-text"><pre>' + value.msg + '</pre></p>';
               table += '<a href="' + value.attechment + '" class="card-text d-block mb-3" download>' + value.attechment + '</a>';
 
-              table += '<a id="reply" class="btn btn-primary">Reply</a>';
-              table += '<a id="replyall" class="btn btn-primary ml-3">Reply All</a>';
+              // table += '<a id="reply" class="btn btn-primary">Reply</a>';
+              // table += '<a id="replyall" class="btn btn-primary ml-3">Reply All</a>';
               table += '</div>';
               table += '<div class="col-sm-6">';
-              table += '<p class="float-end">Date: 10/07/2022</p>';
+              table += '<p class="float-end">Date: ' + value.datetime + '</p>';
               table += '</div>';
               table += '</div>';
               table += '</div>';
@@ -301,22 +307,16 @@ include 'header.php';
 
     });
 
+//reply button 
 
-    // total check count 
+$(document).on("click",function(e){
+e.stopPropagation();
 
-    // $(document).on("click", "#checkall", function(e) {
-    //   e.stopPropagation();
-    //   var isChecked = $(this).is(':checked');
-    //   var numberOfChecked = $(':checked').length;
-    //   console.log(numberOfChecked);
-    //   var totalCheckboxes = $('input:check').length;
-    //   var numberNotChecked = totalCheckboxes - numberOfChecked;
-    //   console.log(numberNotChecked);
-    //   console.log(totalCheckboxes);
+var all_details = $(this).val();
 
-    // });
+console.log(all_details);
 
-    // read/unread
+});
 
 
     $(document).on("change", ".check", function(e) {
@@ -402,7 +402,7 @@ include 'header.php';
     });
 
 
-    $(".check").click(function(e) {
+    $(document).on("cllick",".check",function(e) {
       e.preventDefault();
       var isChecked = $(this).is(':checked');
       var check_id = $(this).attr("data-id");
@@ -504,7 +504,7 @@ include 'header.php';
       form_data.append('ccemaile', ccemail);
       form_data.append('bccmaile', bccemail);
       form_data.append('subject', subject);
-      form_data.append('msg', message);
+      form_data.append('msg',  message);
 
 
       if (toemail == '') {
@@ -519,10 +519,13 @@ include 'header.php';
         alert("Subject is required");
         return false;
       }
-      if (msg == '') {
+      if (msg == '' && msg== null) {
         alert("msg is required");
         return false;
       }
+
+   
+        
 
       $.ajax({
         url: "inbox_mail_send.php",
@@ -746,14 +749,6 @@ include 'header.php';
 
     });
 
-    // unread button
-    // $(document).on("click","#unread",function(e){
-    //   e.stopPropagation();
-    //        var isChecked = $(this).is(':checked');
-    //       var check_id = $(this).attr("data-id");
-    //   alert(check_id);  
-    // $("tr").addClass("bold");
-    // });
 
     //Trash Email fetch ......................................... Start
 

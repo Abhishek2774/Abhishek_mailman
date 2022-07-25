@@ -11,9 +11,12 @@ $gobj = new Database();
     $bccemail = $_POST['bccmaile'];
     $Subject = $_POST['subject'];
     $msg = $_POST['msg'];
+
+    $message = htmlspecialchars($msg);
     $date = date('Y/m/d h:i:s', time());
 
     $target_dir = "upload/";
+    $file = $_FILES['file']['name'];
     $target_file = $target_dir . basename($_FILES['file']['name']);
     $attechment = move_uploaded_file($_FILES['file']['tmp_name'], $target_file);
 
@@ -23,8 +26,8 @@ $gobj = new Database();
         'ccEmail' => $ccemail,
         'bccEmail' => $bccemail,
         'subject' => $Subject,
-        'msg' => $msg,
-        'attechment'=> $target_file,
+        'msg' => $message,
+        'attechment'=> $file,
         'datetime' => $date,
         'sender_status' => 1,
         'reciver_status' => 1,

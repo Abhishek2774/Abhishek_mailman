@@ -1,4 +1,5 @@
-<?php  
+<?php 
+session_start(); 
 include "autoload.php";
 $gobj = new Database();
 $limit_per_page = 10;
@@ -14,7 +15,7 @@ if(isset($_POST['page_no'])){
     $offset = ($page -1)* $limit_per_page;
 
  $search_value = $_POST["search"];
-$sql = "SELECT * FROM All_emails WHERE  subject like '%$search_value%' ORDER BY id DESC LIMIT {$offset},{$limit_per_page}";
+$sql = "SELECT * FROM All_emails WHERE (sender_email='$login_user' AND sender_status=1) OR (reciver_email='$login_user' AND sender_status=1) OR (ccEmail='$login_user' AND sender_status=1) OR (bccEmail='$login_user' AND sender_status=1) AND subject like '%$search_value%'  ORDER BY id DESC LIMIT {$offset},{$limit_per_page}";
 
 $result = $gobj->mysqli->query($sql) or die("Query failed");
 $output = "";
@@ -45,5 +46,3 @@ if ($result->num_rows > 0) {
 } else {
     echo "No Record Found";
 }
-
-?>

@@ -28,7 +28,7 @@
                             <p class="card-text">text attech</p>
 
                             <a id="reply" class="btn btn-primary">Reply</a>
-                            <a id="replyall" class="btn btn-primary ml-3">Reply All</a>
+                            
                         </div>
                         <div class="col-sm-6">
                             <p class="float-end">Date: 10/07/2022</p>

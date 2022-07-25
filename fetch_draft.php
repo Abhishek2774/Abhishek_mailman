@@ -15,7 +15,7 @@ if(isset($_POST['page_no'])){
 }
     $offset = ($page -1)* $limit_per_page;
 
-    $sql = "SELECT * FROM All_emails WHERE sender_email='$login_user' AND draft_status=0 ORDER BY id DESC LIMIT {$offset},{$limit_per_page}";
+    $sql = "SELECT * FROM All_emails WHERE (sender_email='$login_user' OR sender_email='$login_user') AND draft_status=0 ORDER BY id DESC LIMIT {$offset},{$limit_per_page}";
 
     $result = $gobj->mysqli->query($sql)or die("Query failed");
     $output = "";

@@ -24,7 +24,7 @@ if ($result->num_rows > 0) {
     $output .= '<table>
     <tr>
         <th id="col_head" scope="col"><h4>Trash</h4></th>
-        <th id="col_head" scope="col">Draft@mailman.com</th>
+        <th id="col_head" scope="col">Trash@mailman.com</th>
         <th id="col_head" scope="col">Email Subject</th>
         <th id="col_head" scope="col">YY/MM/DD</th>
         <th id="col_head" scope="col"></th>
