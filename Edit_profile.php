@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
     $file_name   = $_FILES['image'];
     // var_dump($file_name);
 
-    $uploaddir = '../image/';
+    $uploaddir = 'http://hestalabs.com/tse/Abhishek_mailman/image/';
     $name =$_FILES['image']['name'];
     $uploadfile = $uploaddir . basename($_FILES['image']['name']);
     $folder = move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile);

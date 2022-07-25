@@ -766,3 +766,6 @@ if ($lname == '' and $lname == null) {
               table += ' </div>';
               table += '</div>';
               table += '</div>';
+
+
+              /var/www/html/tse/Abhishek_mailman/image'

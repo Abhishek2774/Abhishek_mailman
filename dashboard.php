@@ -309,14 +309,14 @@ include 'header.php';
 
 //reply button 
 
-$(document).on("click",function(e){
-e.stopPropagation();
+// $(document).on("click",function(e){
+// e.stopPropagation();
 
-var all_details = $(this).val();
+// var all_details = $(this).val();
 
-console.log(all_details);
+// console.log(all_details);
 
-});
+// });
 
 
     $(document).on("change", ".check", function(e) {
