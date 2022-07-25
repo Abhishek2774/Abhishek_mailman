@@ -14,10 +14,19 @@ if (isset($_POST['submit'])) {
     $file_name   = $_FILES['image'];
     // var_dump($file_name);
 
-    $uploaddir = 'image/';
+    $uploaddir = 'upload/';
     $name =$_FILES['image']['name'];
     $uploadfile = $uploaddir . basename($_FILES['image']['name']);
     $folder = move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile);
+
+    // try {
+    //     if (!move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile)) {
+    //         throw new Exception('Could not move file');
+    //     }
+    //     echo "Upload Complete!";
+    // } catch (Exception $e) {
+    //     die ('File did not upload: ' . $e->getMessage());
+    // }
 
     if ($file_name['name']) {
         $query = "UPDATE Reg_userid SET fname = '$fname',lname = '$lname', remail = '$remail', image = '$name'  WHERE email= '$email'";
